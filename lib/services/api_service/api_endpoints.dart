@@ -1,0 +1,62 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:my_project/services/user_info_service.dart';
+
+final class ApiEndpoints {
+  static String get _apiBaseUrl => dotenv.env['API_BASE_URL_TEST'] ?? '';
+  static String get _authUrl => dotenv.env['AUTH_URL'] ?? '';
+  static String get _fileURL => dotenv.env['FILE_URL'] ?? '';
+
+  static UserInfoService _userInfoService = UserInfoService();
+
+  
+
+  
+
+  //AUTH
+  static String get loginEndpoint =>
+      '${_authUrl}realms/province/protocol/openid-connect/token';
+  static String get getUserRole =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/Info-compte/${_userInfoService.id}';
+
+  //GET
+  static String get getUserInfoByToken => '${_authUrl}realms/province/account';
+  static String get getTechnician =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/person/${_userInfoService.id}';
+  static String get getObjectsList =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/following-up-object';
+  static String get getConstatsList =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/observation';
+  static String get getRecommendationsList =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/recommendation';
+  static String get getSortiesList =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/sortie/find-sorties-by-technician-id/${_userInfoService.id}';
+  static String get getInstructions =>
+      '${_apiBaseUrl}cp-my-project/get-lot-instriction/${_userInfoService.tecId}';
+  static String get getValidatedSorties =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/sortie/find-sorties-by-technician-id-true/${_userInfoService.id}';
+  static String get getUserById =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/person/${_userInfoService.id}';
+  static String get saveNotificationId =>
+      '${_apiBaseUrl}cp-my-project/programing-phases/persons';
+  static String get getAllLotsByUserId =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/get-lot/${_userInfoService.id}/${_userInfoService.spaceType.name}';
+  static String get getLatestPricesList => '${_apiBaseUrl}cp-my-project/following-up-phases/get-lot-validated-bet-or-architect?lotId=';
+  static String get getEntreprise => '${_apiBaseUrl}cp-my-project/following-up-phases/enterprise/';
+
+  //POST
+  static String get postVisite =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/sortie';
+  static String get postVisiteArchitectAndBET =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/sortie-entreprise';
+  static String get postInstructionStatus =>
+      '${_apiBaseUrl}cp-my-project/update-meeting-status/';
+  static String get updateInstruction =>
+      '${_apiBaseUrl}cp-my-project/update-meeting-description/';
+  static String get postValidationPriceList =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/update-sortie/';
+
+  //FILE
+  static String get uploadFile => '${_fileURL}uploadFile';
+  static String get downloadFile =>
+      '${_fileURL}downloadFileSpecific/my_project/';
+}
