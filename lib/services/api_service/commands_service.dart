@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:my_project/controllers/app_snackbar_controller.dart';
 import 'package:my_project/models/dtos/get/lot_dto.dart';
 import 'package:my_project/models/lot_instructions.dart';
@@ -16,11 +17,50 @@ import 'package:my_project/utils/resources/instructions_utils.dart';
 import 'package:my_project/utils/resources/login/login_strings.dart';
 import 'package:dio/dio.dart';
 import '../../enums/visit_type_enum.dart';
+import '../../models/programming_file.dart';
 import '../user_info_service.dart';
+
+import 'package:my_project/models/lot_document.dart';
+
+
+
+
 
 class CommandsService {
   static final Dio _dio = Dio();
   static final _userInfo = UserInfoService();
+  // lib/services/api_service/commands_service.dart
+  // static Future<ProgrammingFileModel?> getProgrammingDocuments(
+  //     String componentId) async {
+  //   if (!await _checkConnection()) return null;
+  //   try {
+  //     final response =
+  //     await _dio.get('${ApiEndpoints.programmingDocuments}$componentId');
+  //     if (!await _isStatusCodeSuccess(response.statusCode)) return null;
+  //     return ProgrammingFileModel.fromJson(response.data);
+  //   } on DioException catch (e) {
+  //     snackbarError("APP ERROR (getProgrammingDocuments): ${e.response?.statusCode}");
+  //     return null;
+  //   }
+  // }
+
+
+  // static Future<List<LotDocument>> getLotDocuments(String lotId) async {
+  //   if (!await _checkConnection()) return [];
+  //   try {
+  //     final response =
+  //     await _dio.get('${ApiEndpoints.getLotDocuments}$lotId'); // عرّف getLotDocuments فـ ApiEndpoints
+  //     if (!await _isStatusCodeSuccess(response.statusCode)) return [];
+  //     List<LotDocument> docs = [];
+  //     for (final item in response.data) {
+  //       docs.add(LotDocument.fromJson(item));
+  //     }
+  //     return docs;
+  //   } on DioException catch (e) {
+  //     snackbarError("APP ERROR (getLotDocuments) : ${e.response?.statusCode}");
+  //     return [];
+  //   }
+  // }
 
   static final headers = {
     'Authorization': 'Bearer ${Constants.token}',
@@ -77,7 +117,8 @@ class CommandsService {
     if (!await _checkConnection()) return [];
     try {
       final response = await _dio
-          .get(ApiEndpoints.getObjectsList + '/${_userInfo.id}/$lotId');
+          // .get(ApiEndpoints.getObjectsList + '/${_userInfo.id}/$lotId');
+          .get(ApiEndpoints.getObjectsList);
       if (!await _isStatusCodeSuccess(response.statusCode)) return [];
       List<Map<String, dynamic>> objectsList = [];
       for (Map<String, dynamic> item in response.data) {
@@ -97,7 +138,8 @@ class CommandsService {
     if (!await _checkConnection()) return [];
     try {
       final response = await _dio
-          .get(ApiEndpoints.getConstatsList + '/${_userInfo.id}/$lotId');
+          // .get(ApiEndpoints.getConstatsList + '/${_userInfo.id}/$lotId');
+          .get(ApiEndpoints.getConstatsList);
       if (!await _isStatusCodeSuccess(response.statusCode)) return [];
       List<Map<String, dynamic>> constatsList = [];
       for (Map<String, dynamic> item in response.data) {
@@ -119,7 +161,8 @@ class CommandsService {
         name: 'URL');
     try {
       final response = await _dio
-          .get(ApiEndpoints.getRecommendationsList + '/${_userInfo.id}/$lotId');
+      // .get(ApiEndpoints.getRecommendationsList + '/${_userInfo.id}/$lotId');
+      .get(ApiEndpoints.getRecommendationsList );
       if (!await _isStatusCodeSuccess(response.statusCode)) return [];
       List<Map<String, dynamic>> recommendationsList = [];
       for (Map<String, dynamic> item in response.data) {
@@ -137,114 +180,120 @@ class CommandsService {
     }
   }
 
+  // static Future<List<Sortie>> getAllPlanifiedSorties() async {
+  //   if (!await _checkConnection()) return [];
+  //   List<Sortie> sorties = <Sortie>[];
+  //
+  //   try {
+  //     log(ApiEndpoints.getSortiesList, name: 'URL');
+  //     final response = await _dio.get(ApiEndpoints.getSortiesList);
+  //     if (!await _isStatusCodeSuccess(response.statusCode)) return [];
+  //     for (Map<String, dynamic> s in response.data) {
+  //       Sortie sortie = Sortie(
+  //           id: s['id'],
+  //           marketId: s['lotDto']['id'],
+  //           marketName: s['lotDto']['titled'],
+  //           marketNumber: s['lotDto']['numbMarch'].toString(),
+  //           // Todo: You can add also the time
+  //           programedDate: s['planningDate'].split('T').first,
+  //           // progressRate: sortie['progressRate'],
+  //           progressRate: 0,
+  //           workStateValue: '',
+  //           workRateValue: '',
+  //           // objects: await getObjectsList(sortie['lotDto']['id']),
+  //           // constats: await getConstatsList(sortie['lotDto']['id']),
+  //           // recommendations: await getRecommendationsList(sortie['lotDto']['id']),
+  //           cardItemsPrestations: [
+  //             for (Map<String, dynamic> prestation in s['priceSchedulePhaseS'])
+  //               Prestation(
+  //                   id: prestation['id'],
+  //                   label: prestation['serviceDescription'],
+  //                   initialQuantity: prestation['quantity'],
+  //                   quantityConsumed: prestation['quantityConsumedlast'] == null
+  //                       ? 0
+  //                       : prestation['quantityConsumedlast']
+  //                               ['quantityConsumed'] ??
+  //                           0,
+  //                   unit: prestation['unit'])
+  //           ]);
+  //       sortie.objects.addAll(await getObjectsList(s['lotDto']['id']));
+  //       sortie.constats.addAll(await getConstatsList(s['lotDto']['id']));
+  //       sortie.recommendations
+  //           .addAll(await getRecommendationsList(s['lotDto']['id']));
+  //       sorties.add(sortie);
+  //     }
+  //   } on DioException catch (e) {
+  //     snackbarError(
+  //         "APP ERROR (getAllPlanifiedSorties): ${e.response?.statusCode}");
+  //   }
+  //   // log(sorties.length.toString());
+  //   return sorties;
+  // }
   static Future<List<Sortie>> getAllPlanifiedSorties() async {
     if (!await _checkConnection()) return [];
-    List<Sortie> sorties = <Sortie>[];
+    final List<Sortie> sorties = <Sortie>[];
 
     try {
       log(ApiEndpoints.getSortiesList, name: 'URL');
       final response = await _dio.get(ApiEndpoints.getSortiesList);
       if (!await _isStatusCodeSuccess(response.statusCode)) return [];
-      for (Map<String, dynamic> s in response.data) {
-        Sortie sortie = Sortie(
-            id: s['id'],
-            marketId: s['lotDto']['id'],
-            marketName: s['lotDto']['titled'],
-            marketNumber: s['lotDto']['numbMarch'].toString(),
-            // Todo: You can add also the time
-            programedDate: s['planningDate'].split('T').first,
-            // progressRate: sortie['progressRate'],
-            progressRate: 0,
-            workStateValue: '',
-            workRateValue: '',
-            // objects: await getObjectsList(sortie['lotDto']['id']),
-            // constats: await getConstatsList(sortie['lotDto']['id']),
-            // recommendations: await getRecommendationsList(sortie['lotDto']['id']),
-            cardItemsPrestations: [
-              for (Map<String, dynamic> prestation in s['priceSchedulePhaseS'])
-                Prestation(
-                    id: prestation['id'],
-                    label: prestation['serviceDescription'],
-                    initialQuantity: prestation['quantity'],
-                    quantityConsumed: prestation['quantityConsumedlast'] == null
-                        ? 0
-                        : prestation['quantityConsumedlast']
-                                ['quantityConsumed'] ??
-                            0,
-                    unit: prestation['unit'])
-            ]);
+
+      for (final Map<String, dynamic> s in response.data) {
+        final sortie = Sortie(
+          id: s['id'],
+          marketId: s['lotDto']['id'],
+          marketName: s['lotDto']['titled'],
+          marketNumber: s['lotDto']['numbMarch'].toString(),
+          // Tu peux ajouter aussi l'heure si besoin
+          programedDate: (s['planningDate'] as String).split('T').first,
+          progressRate: 0,
+          workStateValue: '',
+          workRateValue: '',
+          cardItemsPrestations: [
+            for (final Map<String, dynamic> prestation
+            in s['priceSchedulePhaseS'])
+              Prestation(
+                id: prestation['id'],
+                label: prestation['serviceDescription'],
+                initialQuantity: prestation['quantity'],
+                quantityConsumed: prestation['quantityConsumedlast'] == null
+                    ? 0
+                    : (prestation['quantityConsumedlast']['quantityConsumed'] ??
+                    0),
+                unit: prestation['unit'],
+              ),
+          ],
+        );
+
+        // Objets / constats / recommandations
         sortie.objects.addAll(await getObjectsList(s['lotDto']['id']));
         sortie.constats.addAll(await getConstatsList(s['lotDto']['id']));
         sortie.recommendations
             .addAll(await getRecommendationsList(s['lotDto']['id']));
+
+        // Photos liées à la sortie (même champ que pour ValidatedSortie)
+        if (s['attachedDocument'] != null) {
+          for (final String photo in (s['attachedDocument'] as List)) {
+            sortie.photos.add(photo);
+          }
+        }
+
         sorties.add(sortie);
       }
     } on DioException catch (e) {
       snackbarError(
-          "APP ERROR (getAllPlanifiedSorties): ${e.response?.statusCode}");
+        'APP ERROR (getAllPlanifiedSorties): ${e.response?.statusCode}',
+      );
     }
-    // log(sorties.length.toString());
+
     return sorties;
-    // return [
-    //   Sortie(
-    //       id: "1",
-    //       marketName: 'Marché A',
-    //       marketNumber: '12344',
-    //       programedDate: '12/12/2024',
-    //       visitNumber: 12,
-    //       progressRate: 30,
-    //       objects: ListUtils.cloneList(Constants.objectsList),
-    //       constats: ListUtils.cloneList(Constants.constatsList),
-    //       recommendations: ListUtils.cloneList(Constants.recommendationsList),
-    //       cardItemsPrestations: [
-    //         Prestation(
-    //             id: '123',
-    //             label: 'label 1',
-    //             initialQuantity: 100,
-    //             quantityConsumed: 20,
-    //             unit: 'unit'),
-    //         Prestation(
-    //             id: '123',
-    //             label: 'label 2',
-    //             initialQuantity: 100,
-    //             quantityConsumed: 20,
-    //             unit: 'unit'),
-    //         Prestation(
-    //             id: '123',
-    //             label: 'label 3',
-    //             initialQuantity: 100,
-    //             quantityConsumed: 20,
-    //             unit: 'unit')
-    //       ]),
-    //   Sortie(
-    //       id: "2",
-    //       marketName: 'Marché B',
-    //       marketNumber: '12344',
-    //       programedDate: '13/12/2024',
-    //       visitNumber: 15,
-    //       progressRate: 50,
-    //       objects: ListUtils.cloneList(Constants.objectsList),
-    //       constats: ListUtils.cloneList(Constants.constatsList),
-    //       recommendations: ListUtils.cloneList(Constants.recommendationsList),
-    //       cardItemsPrestations: []),
-    //   Sortie(
-    //       id: "3",
-    //       marketName: 'Marché C',
-    //       marketNumber: '12344',
-    //       programedDate: '13/12/2024',
-    //       visitNumber: 15,
-    //       progressRate: 50,
-    //       objects: ListUtils.cloneList(Constants.objectsList),
-    //       constats: ListUtils.cloneList(Constants.constatsList),
-    //       recommendations: ListUtils.cloneList(Constants.recommendationsList),
-    //       cardItemsPrestations: []),
-    // ];
   }
 
   static Future<List<LotInstructions>> getAllInstructions() async {
     if (!await _checkConnection()) return [];
     try {
       final response = await _dio.get(ApiEndpoints.getInstructions);
+      // final response = await _dio.get(ApiEndpoints.getInstructions+"${lotId}");
       if (!await _isStatusCodeSuccess(response.statusCode)) return [];
       return parseLotInstructions(response.data);
     } on DioException catch (e) {
@@ -383,9 +432,9 @@ class CommandsService {
       log(response.data.toString());
       for (Map<String, dynamic> lot in response.data['content']) {
         LotDto l = LotDto.fromJson(lot);
-        // l.objects.addAll(await getObjectsList(l.id));
-        // l.constats.addAll(await getConstatsList(l.id));
-        // l.recommendations.addAll(await getRecommendationsList(l.id));
+        l.objects.addAll(await getObjectsList(l.id));
+        l.constats.addAll(await getConstatsList(l.id));
+        l.recommendations.addAll(await getRecommendationsList(l.id));
         lots.add(l);
       }
       return lots;
@@ -404,6 +453,7 @@ class CommandsService {
       List<ValidatedSortie> validatedSorties = [];
       for (Map sortie in response.data) {
         validatedSorties.add(ValidatedSortie(
+            lotId: sortie['lotDto']['id'] ?? 'null',          // ✅ هنا
             lotName: sortie['lotDto']['titled'] ?? 'null',
             lotNumber: sortie['lotDto']['numbMarch'] ?? 'null',
             // todo: you can add also the time
@@ -445,6 +495,91 @@ class CommandsService {
     }
     return [];
   }
+  // static Future<List<ValidatedSortie>> getAllValidatedSorties() async {
+  //   if (!await _checkConnection()) return [];
+  //   try {
+  //     final response = await _dio.get(ApiEndpoints.getValidatedSorties);
+  //     if (!await _isStatusCodeSuccess(response.statusCode)) return [];
+  //
+  //     List<ValidatedSortie> validatedSorties = [];
+  //
+  //     for (Map sortie in response.data) {
+  //       // 1) نجمع الأسامي المختارة من JSON
+  //       final objects = <String>[];
+  //       if (sortie['followingUpObjects'] != null) {
+  //         for (final o in sortie['followingUpObjects']) {
+  //           if (o['object'] != null) objects.add(o['object']);
+  //         }
+  //       }
+  //
+  //       final constats = <String>[];
+  //       if (sortie['observations'] != null) {
+  //         for (final c in sortie['observations']) {
+  //           if (c['observation'] != null) constats.add(c['observation']);
+  //         }
+  //       }
+  //
+  //       final recos = <String>[];
+  //       if (sortie['recommendations'] != null) {
+  //         for (final r in sortie['recommendations']) {
+  //           if (r['recommendationName'] != null) {
+  //             recos.add(r['recommendationName']);
+  //           }
+  //         }
+  //       }
+  //
+  //       final photos = <String>[];
+  //       if (sortie['attachedDocument'] != null) {
+  //         for (final p in sortie['attachedDocument']) {
+  //           photos.add(p.toString());
+  //         }
+  //       }
+  //
+  //       // 2) نبني ValidatedSortie كاملة
+  //       validatedSorties.add(
+  //         ValidatedSortie(
+  //           lotId: (sortie['lotDto']['id'] ?? '').toString(),
+  //           lotName: (sortie['lotDto']['titled'] ?? '').toString(),
+  //           lotNumber: (sortie['lotDto']['numbMarch'] ?? '').toString(),
+  //           planningDate: sortie['planningDate'] == null
+  //               ? ''
+  //               : sortie['planningDate'].toString().split('T').first,
+  //           reelDate: (sortie['reelDate'] ?? '').toString(),
+  //           progressRate: sortie['progressRate'] ?? 0,
+  //           visitType: sortie['visitType'][0] == 'ORDINAIRE'
+  //               ? VisitTypeEnum.ordinary
+  //               : VisitTypeEnum.take_attachment,
+  //           siteState:
+  //           CheckboxUtils.getWorkStateValueByAPIValue(sortie['siteState']),
+  //           workRate:
+  //           CheckboxUtils.getWorkRateValueByAPIValue(sortie['workRate']),
+  //           cardItemsPrestations: [
+  //             for (Map prestation in sortie['priceSchedulePhaseS'])
+  //               Prestation(
+  //                 id: prestation['id'],
+  //                 label: prestation['serviceDescription'],
+  //                 initialQuantity: prestation['quantity'],
+  //                 quantityConsumed: prestation['quantityConsumedlast'] == null
+  //                     ? 0
+  //                     : (prestation['quantityConsumedlast']['quantityConsumed'] ??
+  //                     0),
+  //                 unit: prestation['unit'],
+  //               ),
+  //           ],
+  //           photos: photos,
+  //           selectedObjectsLabels: objects,
+  //           selectedConstatsLabels: constats,
+  //           selectedRecommendationsLabels: recos,
+  //         ),
+  //       );
+  //     }
+  //
+  //     return validatedSorties;
+  //   } on DioException catch (e) {
+  //     snackbarError("APP ERROR : ${e.response?.statusCode}");
+  //     return [];
+  //   }
+  // }
 
   static Future<int> getSortiesCount(String lotId) async {
     if (!await _checkConnection()) return 0;
@@ -519,6 +654,38 @@ class CommandsService {
       snackbarError("APP ERROR : ${e.response?.statusCode}");
     }
   }
+
+  // upload file
+  static Future<String?> uploadPlanFile(String filePath) async {
+    debugPrint('uploadPlanFile => filePath: $filePath');
+    try {
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(filePath),
+      });
+
+      final response = await _dio.post(
+        '${ApiEndpoints.uploadFile}?appname=my_project',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
+
+      debugPrint('UPLOAD status: ${response.statusCode}');
+      debugPrint('UPLOAD data: ${response.data}');
+
+      if (response.statusCode != 200) return null;
+
+      return response.data['fileName'] as String?;
+    } on DioException catch (e) {
+      debugPrint('UPLOAD DioException status: ${e.response?.statusCode}');
+      debugPrint('UPLOAD DioException data: ${e.response?.data}');
+      return null;
+    }
+  }
+
+
+
+
+
 
   static Future<void> postValidationPriceList(
       String sortieId, String value) async {

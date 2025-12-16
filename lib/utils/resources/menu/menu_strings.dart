@@ -5,6 +5,7 @@ class MenuStrings {
   static const String profile = 'Profile';
   static const String instructions = 'Instructions';
   static const String priceList = 'Bordereau de prix';
+  static const String portfolio = 'Portfolio';
 
   static const String visits = 'Visites';
 }

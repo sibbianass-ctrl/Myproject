@@ -5,8 +5,6 @@ import 'package:my_project/utils/resources/home/home_strings.dart';
 import 'package:my_project/views/home/widgets/home_card_item.dart';
 import 'package:my_project/widgets/custom_app_bar.dart';
 import 'package:my_project/widgets/custom_page_title.dart';
-import 'package:my_project/services/document_service.dart';
-
 
 class HomeView extends StatelessWidget {
   HomeView({super.key});
@@ -47,23 +45,6 @@ class HomeView extends StatelessWidget {
                                 HomeStrings.emptyPlanningLabel,
                                 textAlign: TextAlign.center,
                               ))
-                        // else
-                        //   for (int i = 0;
-                        //       i < _homeController.sorties.length;
-                        //       i++)
-                        //     HomeCardItem(
-                        //       title: _homeController.sorties[i].marketName,
-                        //       number: _homeController.sorties[i].marketNumber,
-                        //       date: _homeController.sorties[i].programedDate,
-                        //       index: i + 1,
-                        //       isValidated:
-                        //           _homeController.sorties[i].isValidated,
-                                  
-                        //       onOrdinaryTap: () =>
-                        //           _homeController.moveToOrdinaryPage(i),
-                        //       onTakeAttachmentTap: () =>
-                        //           _homeController.moveToTakeAttachmentPage(i),
-                        //     ),
                         else
                           for (int i = 0;
                               i < _homeController.sorties.length;
@@ -75,25 +56,11 @@ class HomeView extends StatelessWidget {
                               index: i + 1,
                               isValidated:
                                   _homeController.sorties[i].isValidated,
-                              
-                              // Existing Navigation
+                                  
                               onOrdinaryTap: () =>
                                   _homeController.moveToOrdinaryPage(i),
-                              
-                              // Existing Attachment Logic
                               onTakeAttachmentTap: () =>
                                   _homeController.moveToTakeAttachmentPage(i),
-
-                              // ⬇️ NEW DYNAMIC CPS LOGIC ⬇️
-                              onCpsTap: () async {
-                                // 1. Grab the ID dynamically from the list
-                                String dynamicMarketId = _homeController.sorties[i].marketId;
-                                
-                                print("👇 Downloading CPS for Market: $dynamicMarketId");
-                                
-                                // 2. Call the service
-                                await DocumentService().openCps(dynamicMarketId);
-                              },
                             ),
                       ],
                     ),

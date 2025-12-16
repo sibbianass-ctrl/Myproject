@@ -242,9 +242,153 @@
 //   }
 // }
 
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:my_project/controllers/profile_controller.dart';
+//
+
+//
+// class EditProfileView extends StatelessWidget {
+//   final ProfileController controller;
+//
+//   const EditProfileView({super.key, required this.controller});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Modifier le profil'),
+//         actions: [
+//           Obx(
+//             () => controller.isLoading.value
+//                 ? Padding(
+//                     padding: const EdgeInsets.all(16.0),
+//                     child: CircularProgressIndicator(
+//                       color: Colors.white,
+//                       strokeWidth: 2.0,
+//                     ),
+//                   )
+//                 : IconButton(
+//                     icon: Icon(Icons.save),
+//                     onPressed: () async {
+//                       final result =
+//                           await controller.executeLoginAndUpdateUser();
+//                       if (result) {
+//                         Get.snackbar("Succès", "Profil mis à jour !");
+//                       } else {
+//                         Get.snackbar("Erreur", "Échec de la mise à jour.");
+//                       }
+//                     },
+//                   ),
+//           ),
+//         ],
+//       ),
+//       body: SingleChildScrollView(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Form(
+//           key: controller.formKey,
+//           child: Column(
+//             children: [
+//               // -------------------- First Name --------------------
+//               TextFormField(
+//                 controller: controller.firstNameController,
+//                 decoration: InputDecoration(
+//                   labelText: 'Prénom',
+//                   icon: Icon(Icons.person),
+//                   border: OutlineInputBorder(),
+//                 ),
+//                 validator: (value) {
+//                   if (value == null || value.isEmpty) {
+//                     return 'Veuillez entrer un prénom';
+//                   }
+//                   return null;
+//                 },
+//               ),
+//               SizedBox(height: 16),
+//
+//               // -------------------- Last Name --------------------
+//               TextFormField(
+//                 controller: controller.lastNameController,
+//                 decoration: InputDecoration(
+//                   labelText: 'Nom',
+//                   icon: Icon(Icons.person_outline),
+//                   border: OutlineInputBorder(),
+//                 ),
+//                 validator: (value) {
+//                   if (value == null || value.isEmpty) {
+//                     return 'Veuillez entrer un nom';
+//                   }
+//                   return null;
+//                 },
+//               ),
+//               SizedBox(height: 16),
+//
+//               // -------------------- Email --------------------
+//               TextFormField(
+//                 controller: controller.emailController,
+//                 keyboardType: TextInputType.emailAddress,
+//                 decoration: InputDecoration(
+//                   labelText: 'Email',
+//                   icon: Icon(Icons.email),
+//                   border: OutlineInputBorder(),
+//                 ),
+//                 validator: (value) {
+//                   if (value == null || value.isEmpty) {
+//                     return 'Veuillez entrer un email';
+//                   }
+//                   if (!GetUtils.isEmail(value)) {
+//                     return 'Veuillez entrer un email valide';
+//                   }
+//                   return null;
+//                 },
+//               ),
+//               SizedBox(height: 16),
+//
+//               // -------------------- Responsable Name --------------------
+//               TextFormField(
+//                 controller: controller.responsableNameController,
+//                 decoration: InputDecoration(
+//                   labelText: 'Nom du responsable',
+//                   icon: Icon(Icons.business),
+//                   border: OutlineInputBorder(),
+//                 ),
+//               ),
+//               SizedBox(height: 16),
+//
+//               // -------------------- Nom complet (existant) --------------------
+//               TextFormField(
+//                 controller: controller.nameController,
+//                 decoration: InputDecoration(
+//                   labelText: 'Nom complet',
+//                   icon: Icon(Icons.person_add),
+//                   border: OutlineInputBorder(),
+//                 ),
+//               ),
+//               SizedBox(height: 16),
+//
+//               // -------------------- Phone (existant) --------------------
+//               TextFormField(
+//                 controller: controller.phoneController,
+//                 keyboardType: TextInputType.phone,
+//                 decoration: InputDecoration(
+//                   labelText: 'Téléphone',
+//                   icon: Icon(Icons.phone),
+//                   border: OutlineInputBorder(),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_project/controllers/profile_controller.dart';
+import '../../controllers/profile_controller.dart';
 
 class EditProfileView extends StatelessWidget {
   final ProfileController controller;
@@ -258,26 +402,35 @@ class EditProfileView extends StatelessWidget {
         title: Text('Modifier le profil'),
         actions: [
           Obx(
-            () => controller.isLoading.value
+                () => controller.isLoading.value
                 ? Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 2.0,
-                    ),
-                  )
+              padding: const EdgeInsets.all(16.0),
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 2.0,
+              ),
+            )
                 : IconButton(
-                    icon: Icon(Icons.save),
-                    onPressed: () async {
-                      final result =
-                          await controller.executeLoginAndUpdateUser();
-                      if (result) {
-                        Get.snackbar("Succès", "Profil mis à jour !");
-                      } else {
-                        Get.snackbar("Erreur", "Échec de la mise à jour.");
-                      }
-                    },
-                  ),
+              icon: Icon(Icons.save),
+              onPressed: () async {
+                if (!controller.formKey.currentState!.validate()) {
+                  return;
+                }
+
+                // Calcul du nom complet
+                controller.nameController.text =
+                "${controller.firstNameController.text.trim()} ${controller.lastNameController.text.trim()}";
+
+                final result =
+                await controller.executeLoginAndUpdateUser();
+                if (result) {
+                  Get.snackbar("Succès", "Profil mis à jour !");
+                  Navigator.pop(context);
+                } else {
+                  Get.snackbar("Erreur", "Échec de la mise à jour.");
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -287,7 +440,7 @@ class EditProfileView extends StatelessWidget {
           key: controller.formKey,
           child: Column(
             children: [
-              // -------------------- First Name --------------------
+              // -------------------- Prénom --------------------
               TextFormField(
                 controller: controller.firstNameController,
                 decoration: InputDecoration(
@@ -295,16 +448,12 @@ class EditProfileView extends StatelessWidget {
                   icon: Icon(Icons.person),
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer un prénom';
-                  }
-                  return null;
-                },
+                validator: (value) =>
+                value == null || value.isEmpty ? 'Veuillez entrer un prénom' : null,
               ),
               SizedBox(height: 16),
 
-              // -------------------- Last Name --------------------
+              // -------------------- Nom --------------------
               TextFormField(
                 controller: controller.lastNameController,
                 decoration: InputDecoration(
@@ -312,12 +461,8 @@ class EditProfileView extends StatelessWidget {
                   icon: Icon(Icons.person_outline),
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer un nom';
-                  }
-                  return null;
-                },
+                validator: (value) =>
+                value == null || value.isEmpty ? 'Veuillez entrer un nom' : null,
               ),
               SizedBox(height: 16),
 
@@ -342,7 +487,7 @@ class EditProfileView extends StatelessWidget {
               ),
               SizedBox(height: 16),
 
-              // -------------------- Responsable Name --------------------
+              // -------------------- Nom du responsable --------------------
               TextFormField(
                 controller: controller.responsableNameController,
                 decoration: InputDecoration(
@@ -353,27 +498,18 @@ class EditProfileView extends StatelessWidget {
               ),
               SizedBox(height: 16),
 
-              // -------------------- Nom complet (existant) --------------------
+              // -------------------- Numéro du responsable --------------------
               TextFormField(
-                controller: controller.nameController,
+                controller: controller.phoneController,
+                keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
-                  labelText: 'Nom complet',
-                  icon: Icon(Icons.person_add),
+                  labelText: 'Téléphone du responsable',
+                  icon: Icon(Icons.phone_in_talk),
                   border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 16),
 
-              // -------------------- Phone (existant) --------------------
-              TextFormField(
-                controller: controller.phoneController,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  labelText: 'Téléphone',
-                  icon: Icon(Icons.phone),
-                  border: OutlineInputBorder(),
-                ),
-              ),
             ],
           ),
         ),

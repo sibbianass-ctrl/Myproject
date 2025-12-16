@@ -3,7 +3,7 @@ class AppStrings {
   static const String appTitle = 'My Project';
   static const String versionLabel = 'Version 2.5.0';
   static const String copyright =
-      'Copyright © 2025, DGNTI / Province Berkane / Maroc';
+      'Copyright © 2025, DGNTI / Province Settat / Maroc';
 
   // Dialog
   static const String loadingDialogLabel = 'Chargement';

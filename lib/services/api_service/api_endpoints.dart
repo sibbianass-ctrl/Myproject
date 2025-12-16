@@ -24,11 +24,15 @@ final class ApiEndpoints {
   static String get getConstatsList =>
       '${_apiBaseUrl}cp-my-project/following-up-phases/observation';
   static String get getRecommendationsList =>
-      '${_apiBaseUrl}cp-my-project/following-up-phases/recommendation';
+      '${_apiBaseUrl}cp-my-project/following-up-phases/recommendation'; // no fonctionne
   static String get getSortiesList =>
       '${_apiBaseUrl}cp-my-project/following-up-phases/sortie/find-sorties-by-technician-id/${_userInfoService.id}';
+  // static String get getInstructions =>
+  //     '${_apiBaseUrl}cp-my-project/get-lot-instriction/${_userInfoService.tecId}';
+  // static String get getInstructions =>
+  //     '${_apiBaseUrl}cp-my-project/get-lot-instriction/6900c91f18cdb89ad4e731f9';
   static String get getInstructions =>
-      '${_apiBaseUrl}cp-my-project/get-lot-instriction/${_userInfoService.tecId}';
+      '${_apiBaseUrl}cp-my-project/get-lot-instriction/';
   static String get getGovernerInstruction =>
       '${_apiBaseUrl}cp-my-project/get-governor-instruction-by-Entreprise-id/${_userInfoService.enterpriseId}?';
   static String get getValidatedSorties =>
@@ -48,6 +52,7 @@ final class ApiEndpoints {
   static String get getSuiteReserved =>
       '${_apiBaseUrl}cp-my-project/get-reserved-suite-status';
 
+
   //POST
   static String get saveSuiteReserved =>
       '${_apiBaseUrl}cp-my-project/save-reserved-suite-status';
@@ -64,8 +69,15 @@ final class ApiEndpoints {
   static String get saveGovernorInstruction =>
       '${_apiBaseUrl}cp-my-project/save-governor-instruction';
 
-  //FILE
-  static String get uploadFile => '${_fileURL}uploadFile';
+  // FILE
+  static String get uploadFile => '${_fileURL}uploadFile/';
+
+  // نفس IP و port اللي عند صاحبك (بدّلهم إذا مختلفين عندك)
+  static String get launchingServiceBaseUrl =>
+      'http://172.16.20.233:8130/api';
+
   static String get downloadFile =>
       '${_fileURL}downloadFileSpecific/my_project/';
+
+
 }

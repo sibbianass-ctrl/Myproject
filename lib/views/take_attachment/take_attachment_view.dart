@@ -10,6 +10,8 @@ import 'package:my_project/widgets/photo_picker.dart';
 import '../../utils/resources/global/app_colors.dart';
 import '../../utils/resources/global/app_strings.dart';
 import '../../widgets/custom_app_bar.dart';
+import 'package:my_project/views/ordinary_visit/widgets/delay_card.dart';
+import 'package:my_project/views/ordinary_visit/widgets/chrono_card.dart';
 
 class TakeAttachmentView extends StatelessWidget {
   TakeAttachmentView({super.key});
@@ -95,6 +97,16 @@ class TakeAttachmentView extends StatelessWidget {
 
                       //Divider
                       const Divider(),
+                      Row(
+                        children: [
+                          Expanded(child: DelayCard(sortie: _controller.sortie.value)),
+                          const SizedBox(width: 12),
+                          Expanded(child: ChronoCard(sortie: _controller.sortie.value)),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+
+
 
                       //Etat de chantier
                       const Text(

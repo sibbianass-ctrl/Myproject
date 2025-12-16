@@ -17,8 +17,6 @@ class HomeCardItem extends StatelessWidget {
   final bool isValidated;
   final Function onOrdinaryTap;
   final Function onTakeAttachmentTap;
-  final Function onCpsTap; // 1. NEW PARAMETER
-
   const HomeCardItem({
     super.key,
     required this.title,
@@ -28,10 +26,7 @@ class HomeCardItem extends StatelessWidget {
     required this.isValidated,
     required this.onOrdinaryTap,
     required this.onTakeAttachmentTap,
-    required this.onCpsTap, // 2. REQUIRED IN CONSTRUCTOR
   });
-
-  // 3. REMOVED the hardcoded onCpsClick function from here
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +90,7 @@ class HomeCardItem extends StatelessWidget {
                     children: [
                       Text(
                         AppStringsUtils.truncateWithEllipsis(title, 25),
+                        // title,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
@@ -136,11 +132,6 @@ class HomeCardItem extends StatelessWidget {
                         text: HomeStrings.cardButtonTextattAchementLabel,
                         onTap: () => onTakeAttachmentTap(),
                       ),
-                      HomeCardButton(
-                        text: HomeStrings.cpsDownload,
-                        // 4. USE THE PARAMETER HERE
-                        onTap: () => onCpsTap(), 
-                      )
                     ],
                   )
               ],

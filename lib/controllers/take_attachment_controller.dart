@@ -12,6 +12,8 @@ import '../widgets/confirmation_dialog.dart';
 import '../widgets/loading_dialog.dart';
 import 'photo_controller.dart';
 
+
+
 class TakeAttachmentController extends GetxController {
   Rx<Sortie> sortie = Sortie().obs;
   RxString searchQuery = ''.obs;

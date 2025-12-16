@@ -17,10 +17,22 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "config/.env");
   HttpOverrides.global = MyHttpOverrides();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-  OneSignal.initialize("53c2d309-eae2-4e13-99e5-54f42199ff9f");
-  OneSignal.Notifications.requestPermission(true);
+  try {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+  } catch (e, st) {
+    debugPrint('Firebase initialization error: $e');
+    debugPrint('$st');
+  }
+
+  try {
+    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+    OneSignal.initialize("d8cb3bc9-aded-47e4-9166-26966c8c2a1a");
+    OneSignal.Notifications.requestPermission(true);
+  } catch (e, st) {
+    debugPrint('OneSignal initialization error: $e');
+    debugPrint('$st');
+  }
   runApp(const MyApp());
 }
 

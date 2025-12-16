@@ -10,6 +10,8 @@ import '../views/splash_screen_view.dart';
 import '../views/start_view.dart';
 import '../views/menu/menu_view.dart';
 
+import 'package:my_project/views/portfolio/portfolio_static_view.dart';
+// import 'package:my_project/views/profile/portfolio_details_static_view.dart';
 
 class Routes {
   static const String logingPage = '/login';
@@ -25,7 +27,11 @@ class Routes {
   static const String governorInstructionDetails =
       '/governor_instruction_details';
 
-      static const String editProfile = '/edit-profile';
+  static const String portfolioPage = '/portfolio';
+  static const String portfolioDetailsPage = '/portfolio/details';
+
+
+  static const String editProfile = '/edit-profile';
 }
 
 Map<String, WidgetBuilder> publicRoutes(BuildContext context) {
@@ -43,5 +49,11 @@ Map<String, WidgetBuilder> publicRoutes(BuildContext context) {
     // Routes.priceListsPageArchitect: (context) => PriceListArchitectView(),
     Routes.governorInstructionDetails: (context) =>
         InstructionArchitectDetailsView(),
+
+    // Portfolio routes
+    Routes.portfolioPage: (context) => PortfolioStaticView(),
+    // Routes.portfolioDetailsPage: (context) => PortfolioDetailsStaticView(
+    //   marche: ModalRoute.of(context)!.settings.arguments as String,
+    // ),
   };
 }

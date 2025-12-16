@@ -89,3 +89,4 @@ class HistoryView extends StatelessWidget {
     );
   }
 }
+

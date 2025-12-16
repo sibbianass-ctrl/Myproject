@@ -41,53 +41,48 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDE66Pvzm2o-lMD7tDM1rL84OaDdj4k3Uk',
-    appId: '1:446593118842:web:2d1995abdbe6a7361041c3',
-    messagingSenderId: '446593118842',
-    projectId: 'marchand-6bc55',
-    authDomain: 'marchand-6bc55.firebaseapp.com',
-    databaseURL: 'https://marchand-6bc55-default-rtdb.firebaseio.com',
-    storageBucket: 'marchand-6bc55.firebasestorage.app',
-    measurementId: 'G-12PMJGD4KC',
+    apiKey: 'AIzaSyCd2NvW_5i8FTPHIpuqLEky1qwf8VETjZM',
+    appId: '1:1047760327952:web:e205f1c4be15e4d5b24195',
+    messagingSenderId: '1047760327952',
+    projectId: 'notificationmypproject',
+    authDomain: 'notificationmypproject.firebaseapp.com',
+    storageBucket: 'notificationmypproject.firebasestorage.app',
+    measurementId: 'G-THNM4DFYYJ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyANpm8x1GYgefXU2ZKE5Viq3JcPj-ksSXQ',
-    appId: '1:446593118842:android:68a02a696d17579a1041c3',
-    messagingSenderId: '446593118842',
-    projectId: 'marchand-6bc55',
-    databaseURL: 'https://marchand-6bc55-default-rtdb.firebaseio.com',
-    storageBucket: 'marchand-6bc55.firebasestorage.app',
+    apiKey: 'AIzaSyDa7su-XlToaQ5ytR20hDgeSiXV0KdUq0U',
+    appId: '1:1047760327952:android:061a2c4480e10dd4b24195',
+    messagingSenderId: '1047760327952',
+    projectId: 'notificationmypproject',
+    storageBucket: 'notificationmypproject.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAV2yKbbPJyalAZOm7SpmLBZ2-8WqNdX-4',
-    appId: '1:446593118842:ios:49afae29dc2ec7cb1041c3',
-    messagingSenderId: '446593118842',
-    projectId: 'marchand-6bc55',
-    databaseURL: 'https://marchand-6bc55-default-rtdb.firebaseio.com',
-    storageBucket: 'marchand-6bc55.firebasestorage.app',
+    apiKey: 'AIzaSyDXYeiTarSDvpxPzYHOmoh7NYyeBai326c',
+    appId: '1:1047760327952:ios:db05c135a8efaad3b24195',
+    messagingSenderId: '1047760327952',
+    projectId: 'notificationmypproject',
+    storageBucket: 'notificationmypproject.firebasestorage.app',
     iosBundleId: 'com.example.myProject',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAV2yKbbPJyalAZOm7SpmLBZ2-8WqNdX-4',
-    appId: '1:446593118842:ios:49afae29dc2ec7cb1041c3',
-    messagingSenderId: '446593118842',
-    projectId: 'marchand-6bc55',
-    databaseURL: 'https://marchand-6bc55-default-rtdb.firebaseio.com',
-    storageBucket: 'marchand-6bc55.firebasestorage.app',
+    apiKey: 'AIzaSyDXYeiTarSDvpxPzYHOmoh7NYyeBai326c',
+    appId: '1:1047760327952:ios:db05c135a8efaad3b24195',
+    messagingSenderId: '1047760327952',
+    projectId: 'notificationmypproject',
+    storageBucket: 'notificationmypproject.firebasestorage.app',
     iosBundleId: 'com.example.myProject',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDE66Pvzm2o-lMD7tDM1rL84OaDdj4k3Uk',
-    appId: '1:446593118842:web:28e34f34db3d1a0f1041c3',
-    messagingSenderId: '446593118842',
-    projectId: 'marchand-6bc55',
-    authDomain: 'marchand-6bc55.firebaseapp.com',
-    databaseURL: 'https://marchand-6bc55-default-rtdb.firebaseio.com',
-    storageBucket: 'marchand-6bc55.firebasestorage.app',
-    measurementId: 'G-XVCY6W1489',
+    apiKey: 'AIzaSyCd2NvW_5i8FTPHIpuqLEky1qwf8VETjZM',
+    appId: '1:1047760327952:web:0909299f5b7c6475b24195',
+    messagingSenderId: '1047760327952',
+    projectId: 'notificationmypproject',
+    authDomain: 'notificationmypproject.firebaseapp.com',
+    storageBucket: 'notificationmypproject.firebasestorage.app',
+    measurementId: 'G-HHC580MG1C',
   );
 }
