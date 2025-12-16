@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/utils/responsive_utils.dart';
 
 class LabeledContainer extends StatelessWidget {
   final String labelText;
@@ -15,7 +16,7 @@ class LabeledContainer extends StatelessWidget {
     return InputDecorator(
       decoration: InputDecoration(
         labelText: labelText,
-      labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      labelStyle:  TextStyle(fontSize: getResponsiveFontSize(context, 12), fontWeight: FontWeight.bold),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),

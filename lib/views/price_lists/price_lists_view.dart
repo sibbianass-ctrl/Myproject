@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_project/utils/resources/global/price_list/price_list_strings.dart';
+import 'package:my_project/utils/resources/price_list/price_list_strings.dart';
 import '../../controllers/home_architect_controller.dart';
 import '../../utils/resources/global/app_strings.dart';
 import '../../widgets/custom_app_bar_2.dart';

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_project/views/home_architect/home_architect_view.dart';
+import 'package:my_project/views/instructions_architect/instructions_architect_view.dart';
 import 'package:my_project/views/price_lists/price_lists_view.dart';
 import 'package:my_project/views/profile_architect/profile_architect_view.dart';
 import '../../controllers/navigation_menu_controller.dart';
 import '../../utils/resources/menu/menu_strings.dart';
 import '../menu/widgets/navigation_destination_item.dart';
+
 class MenuArchitectView extends StatelessWidget {
   MenuArchitectView({super.key});
   final _menuController = Get.put(NavigationMenuController());
@@ -24,6 +26,11 @@ class MenuArchitectView extends StatelessWidget {
       'ic': Icons.table_chart_outlined,
       'label': MenuStrings.priceList,
       'widget': PriceListsView()
+    },
+    {
+      'ic': Icons.checklist,
+      'label': MenuStrings.instructions,
+      'widget': InstructionsArchitectView()
     },
     {
       'ic': Icons.account_circle_outlined,

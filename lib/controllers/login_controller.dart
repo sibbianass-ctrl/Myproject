@@ -31,10 +31,7 @@ class LoginController extends GetxController {
   Future<void> getPlayerId() async {
     await Future.delayed(
         Duration(seconds: 3)); // Wait for OneSignal to initialize
-    // String? getExternalId = await OneSignal.User.getExternalId();
-    // log('message: $getExternalId');
-    // String? getOnesignalId = await OneSignal.User.getOnesignalId();
-    // log('message: $getOnesignalId');
+
     userId = OneSignal.User.pushSubscription.id;
     log('Getting Player ID : $userId');
   }

@@ -344,6 +344,35 @@ class CommandsService {
     // ];
   }
 
+  static Future<Map> getAllArchitectInstructions(int pageNumber) async {
+    if (!await _checkConnection()) return {};
+    try {
+      log(ApiEndpoints.getGovernerInstruction + 'page=$pageNumber&size=6');
+      final response = await _dio
+          .get(ApiEndpoints.getGovernerInstruction + 'page=$pageNumber&size=6');
+      if (!await _isStatusCodeSuccess(response.statusCode)) return {};
+      return response.data;
+    } on DioException catch (e) {
+      snackbarError(
+          "APP ERROR (getAllInstructions) : ${e.response?.statusCode}");
+    }
+    return {};
+  }
+
+  static Future<List> getSuiteReserved() async {
+    if (!await _checkConnection()) return [];
+    try {
+      log(ApiEndpoints.getSuiteReserved);
+      final response = await _dio.get(ApiEndpoints.getSuiteReserved);
+      if (!await _isStatusCodeSuccess(response.statusCode)) return [];
+      return response.data;
+    } on DioException catch (e) {
+      snackbarError(
+          "APP ERROR (getAllInstructions) : ${e.response?.statusCode}");
+    }
+    return [];
+  }
+
   static Future<List<LotDto>> getAllLotByUserId() async {
     if (!await _checkConnection()) return [];
     try {
@@ -417,6 +446,21 @@ class CommandsService {
     return [];
   }
 
+  static Future<int> getSortiesCount(String lotId) async {
+    if (!await _checkConnection()) return 0;
+    try {
+      log(ApiEndpoints.getSortiesCount + lotId, name: 'URL Sorties Count');
+      final response = await _dio.get(ApiEndpoints.getSortiesCount + lotId);
+      if (!await _isStatusCodeSuccess(response.statusCode)) return 0;
+      return response.data;
+    } on DioException catch (e) {
+      snackbarError("APP ERROR : ${e.response?.statusCode}");
+    }
+    return 0;
+    // await Future.delayed(const Duration(seconds: 2));
+    // return 6;
+  }
+
   static Future<Map> _getUserById() async {
     if (!await _checkConnection()) return {};
     try {
@@ -458,6 +502,24 @@ class CommandsService {
   }
 
   // Posts
+  static Future<void> saveSuiteReserved(String suiteReserved) async {
+    if (!await _checkConnection()) return;
+    try {
+      log(ApiEndpoints.saveSuiteReserved, name: 'saveSuiteReserved URL');
+      final response = await _dio.post(
+        ApiEndpoints.saveSuiteReserved,
+        data: {
+          "status": suiteReserved,
+        },
+      );
+      if (![200, 201, 204].contains(response.statusCode)) {
+        snackbarError(AppStrings.errorWhilePosting);
+      }
+    } on DioException catch (e) {
+      snackbarError("APP ERROR : ${e.response?.statusCode}");
+    }
+  }
+
   static Future<void> postValidationPriceList(
       String sortieId, String value) async {
     if (!await _checkConnection()) return;
@@ -665,5 +727,21 @@ class CommandsService {
       return false;
     }
     return true;
+  }
+
+  static Future<void> postSuiteReserved(Map<String, dynamic> data) async {
+    if (!await _checkConnection()) return;
+    try {
+      log(ApiEndpoints.saveGovernorInstruction);
+      final response = await _dio.post(
+        ApiEndpoints.saveGovernorInstruction,
+        data: data,
+      );
+      if (![200, 201, 204].contains(response.statusCode)) {
+        snackbarError(AppStrings.errorWhilePosting);
+      }
+    } on DioException catch (e) {
+      snackbarError("APP ERROR : ${e.response?.statusCode}");
+    }
   }
 }

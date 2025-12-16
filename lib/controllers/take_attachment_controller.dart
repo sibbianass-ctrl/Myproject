@@ -19,6 +19,7 @@ class TakeAttachmentController extends GetxController {
   final PhotoController photoController = Get.put(PhotoController());
   FileUploadService _fileUploadService = FileUploadService();
   List<String> files = <String>[];
+  int sortiesCount = 0;
 
   // Method to filter items based on search query
   void filterItems() {

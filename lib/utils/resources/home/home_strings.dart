@@ -1,6 +1,7 @@
 class HomeStrings {
   static const String pageTitle = 'Planning des Sorties';
   //Visite Ordinaire
+  static const String cpsDownload = 'Download CPS';
   static const String cardButtonTextOrdinaryLabel = 'Visite ordinaire';
   //Prise des attachement
   static const String cardButtonTextattAchementLabel = "Prise des attachements";

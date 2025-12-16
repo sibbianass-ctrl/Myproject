@@ -15,6 +15,7 @@ class OridnaryVisitController extends GetxController {
   final PhotoController photoController = Get.put(PhotoController());
   FileUploadService _fileUploadService = FileUploadService();
   List<String> files = <String>[];
+  int sortiesCount = 0;
 
   List<String> getSelectedObjectsIds() {
     return sortie.value.objects
@@ -64,8 +65,7 @@ class OridnaryVisitController extends GetxController {
         }
         await uploadPhotos();
         Get.dialog(LoadingDialog(), barrierDismissible: false);
-        // uploading photos
-        //You can fix this partie where you send just required fields NOT the holl Sortie object
+   
         if (await CommandsService.postOrdinaryVisite(
             sortie.value,
             getSelectedObjectsIds(),

@@ -2,5 +2,5 @@ enum AuthEnum {
   loginCorrect,
   loginIncorrect,
   connectionError,
-  unknownError,
+  unknownError, loginOk, error,
 }

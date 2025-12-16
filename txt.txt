@@ -1,0 +1,455 @@
+Sortie.dart (model) : 
+import 'package:my_project/models/dtos/get/lot_dto.dart';
+import 'package:my_project/models/prestation.dart';
+
+class Sortie {
+  String id;
+  String marketId;
+  String marketName;
+  String marketNumber;
+  String programedDate;
+  int visitNumber;
+  String workStateValue;
+  String workRateValue;
+  double progressRate;
+  DateTime currentDate = DateTime.now().toLocal();
+  bool isValidated = false;
+  bool isPriceListIsValidated = false;
+
+  List<Map<String, dynamic>> objects = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>> recommendations = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>> constats = <Map<String, dynamic>>[];
+  //Berderau des prix
+  List<Prestation> cardItemsPrestations = [];
+
+  void clear() {
+    id = '';
+    marketId = '';
+    marketName = '';
+    marketNumber = '';
+    programedDate = '';
+    visitNumber = 0;
+    workStateValue = '';
+    workRateValue = '';
+    progressRate = 0;
+    currentDate = DateTime.now().toLocal();
+    isValidated = false;
+    isPriceListIsValidated = false;
+
+    objects.clear();
+    recommendations.clear();
+    constats.clear();
+  }
+
+  Sortie(
+      {this.id = '',
+      this.marketId = '',
+      this.marketName = '',
+      this.marketNumber = '',
+      this.programedDate = '',
+      this.visitNumber = 0,
+      this.progressRate = 0,
+      this.workStateValue = '',
+      this.workRateValue = '',
+      this.cardItemsPrestations = const []});
+
+  void setLot(LotDto lot) {
+    this.marketId = lot.id;
+    this.marketName = lot.titled;
+    this.marketNumber = lot.numbMarch;
+  }
+}
+
+
+
+home_view.dart (the responsable on listing the sorties) : 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:my_project/controllers/home_controller.dart';
+import 'package:my_project/utils/resources/home/home_strings.dart';
+import 'package:my_project/views/home/widgets/home_card_item.dart';
+import 'package:my_project/widgets/custom_app_bar.dart';
+import 'package:my_project/widgets/custom_page_title.dart';
+
+class HomeView extends StatelessWidget {
+  HomeView({super.key});
+  final HomeController _homeController = Get.put(HomeController());
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.sizeOf(context);
+    return Scaffold(
+      appBar: const CustomAppBar(),
+      body: Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: size.width * .05),
+        child: Column(
+          children: [
+            //Title
+            CustomPageTitle(
+              size: size,
+              title: HomeStrings.pageTitle,
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            // Cards
+            Expanded(
+              flex: 1,
+              child: Scrollbar(
+                thumbVisibility: true,
+                child: RefreshIndicator(
+                  onRefresh: () async => _homeController.refresh(),
+                  child: Obx(
+                    () => ListView(
+                      children: [
+                        if (_homeController.sorties.isEmpty)
+                          const SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                HomeStrings.emptyPlanningLabel,
+                                textAlign: TextAlign.center,
+                              ))
+                        else
+                          for (int i = 0;
+                              i < _homeController.sorties.length;
+                              i++)
+                            HomeCardItem(
+                              title: _homeController.sorties[i].marketName,
+                              number: _homeController.sorties[i].marketNumber,
+                              date: _homeController.sorties[i].programedDate,
+                              index: i + 1,
+                              isValidated:
+                                  _homeController.sorties[i].isValidated,
+                                  
+                              onOrdinaryTap: () =>
+                                  _homeController.moveToOrdinaryPage(i),
+                              onTakeAttachmentTap: () =>
+                                  _homeController.moveToTakeAttachmentPage(i),
+                            ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+bro i got lost,let's recap,first you gave me thing s working statically : 
+document_service.dart : 
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
+
+class DocumentService {
+  // 1. DATA URL (Where we get the file NAME)
+  // Direct connection to the Launching Service
+  final String infoBaseUrl = "http://192.168.209.179:8130/api/s-launching-phase"; 
+
+  // 2. DOWNLOAD URL (Where we get the file BYTES)
+  // Connection to the Gateway/File Service
+  // Note: We use the IP, NOT 'localhost', so the phone can reach it!
+  final String fileBaseUrl = "http://192.168.209.179:8200"; 
+  
+  // 3. APP NAME (Folder on disk)
+  final String appName = "my_project";
+
+  Future<void> openCps(String lotId) async {
+    // Step A: Ask Port 8130 for the filename
+    final String dataUrl = "$infoBaseUrl/lots/$lotId";
+    
+    print("🚀 Step 1: Fetching Info from: $dataUrl");
+
+    try {
+      final response = await http.get(Uri.parse(dataUrl))
+          .timeout(const Duration(seconds: 5));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final String? fileName = data['cps'];
+
+        if (fileName != null && fileName.isNotEmpty && fileName != "null") {
+          
+          // Step B: Ask Port 8200 for the file content
+          // We combine the File Base URL + The File Path + App Name + Filename
+          final String downloadUrl = "$fileBaseUrl/api/file/downloadFileSpecific/$appName/$fileName";
+          
+          print("🔗 Step 2: Found File. Opening: $downloadUrl");
+          
+          final Uri uri = Uri.parse(downloadUrl);
+          
+          if (await canLaunchUrl(uri)) {
+             await launchUrl(uri, mode: LaunchMode.externalApplication);
+          } else {
+            print("❌ Could not launch browser.");
+          }
+        } else {
+          print("⚠️ Database record found, but 'cps' is empty.");
+        }
+      } else {
+        print("❌ Info Fetch Failed: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("💥 EXCEPTION: $e");
+    }
+  }
+}
+and i tested that by adding a button in the home_card_item.dart as the following : 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:my_project/services/document_service.dart';
+import 'package:my_project/utils/app_strings_utils.dart';
+import 'package:my_project/utils/resources/global/app_strings.dart';
+import 'package:my_project/utils/resources/home/home_dimensions.dart';
+import 'package:my_project/views/home/widgets/home_card_button.dart';
+import 'package:my_project/views/home/widgets/validated_text_label.dart';
+import '../../../utils/resources/global/app_colors.dart';
+import '../../../utils/resources/home/home_strings.dart';
+import '../../../widgets/confirmation_dialog.dart';
+
+
+class HomeCardItem extends StatelessWidget {
+  final String title;
+  final String number;
+  final String date;
+  final int index;
+  final bool isValidated;
+  final Function onOrdinaryTap;
+  final Function onTakeAttachmentTap;
+  const HomeCardItem({
+    super.key,
+    required this.title,
+    required this.number,
+    required this.date,
+    required this.index,
+    required this.isValidated,
+    required this.onOrdinaryTap,
+    required this.onTakeAttachmentTap,
+  });
+
+  void onCpsClick() async {
+    // 1. Check if button works
+    print("🔵 BUTTON CLICKED!");
+
+    // REPLACE THIS with your actual ID variable
+    String specificLotId = "693172b5afe281edfa290d06"; 
+    print("🔵 ID Being Used: $specificLotId");
+
+    // 2. Call the service
+    await DocumentService().openCps(specificLotId);
+    
+    print("🔵 Function Finished");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        border: Border.all(width: .3, color: Colors.black),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(HomeDimensions.cardBorderRadius),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            spreadRadius: 0,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Index
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: 146,
+              decoration: const BoxDecoration(
+                color: AppColors.green,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(HomeDimensions.cardBorderRadius),
+                  bottomLeft: Radius.circular(HomeDimensions.cardBorderRadius),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  index.toString(),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+          // Card Info
+          Expanded(
+            flex: 8,
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Get.dialog(ConfirmationDialog(
+                      title: AppStrings.market,
+                      content: title,
+                      yesButtonTitle: AppStrings.ok,
+                      noButtonTitle: '',
+                    ));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        AppStringsUtils.truncateWithEllipsis(title, 25),
+                        // title,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      if (isValidated)
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Icon(
+                            Icons.verified,
+                            color: Colors.green,
+                            size: 16,
+                          ),
+                        )
+                    ],
+                  ),
+                ),
+                Text(
+                  '${AppStrings.dateLabel} : $date',
+                  style: const TextStyle(fontSize: 12),
+                ),
+                Text(
+                  '${AppStrings.numberLabel} : $number',
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                if (isValidated)
+                  ValidatedTextLabel(text: HomeStrings.validationSortieDone)
+                else
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      HomeCardButton(
+                        text: HomeStrings.cardButtonTextOrdinaryLabel,
+                        onTap: () => onOrdinaryTap(),
+                      ),
+                      HomeCardButton(
+                        text: HomeStrings.cardButtonTextattAchementLabel,
+                        onTap: () => onTakeAttachmentTap(),
+                      ),
+                      HomeCardButton(
+      text: HomeStrings.cpsDownload,
+      // Here is the change: point to your unique function
+      onTap: () => onCpsClick(), 
+    )
+                    ],
+                  )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+knowing my home_view.dart is the following : 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:my_project/controllers/home_controller.dart';
+import 'package:my_project/utils/resources/home/home_strings.dart';
+import 'package:my_project/views/home/widgets/home_card_item.dart';
+import 'package:my_project/widgets/custom_app_bar.dart';
+import 'package:my_project/widgets/custom_page_title.dart';
+
+
+class HomeView extends StatelessWidget {
+  HomeView({super.key});
+  final HomeController _homeController = Get.put(HomeController());
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.sizeOf(context);
+    return Scaffold(
+      appBar: const CustomAppBar(),
+      body: Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: size.width * .05),
+        child: Column(
+          children: [
+            //Title
+            CustomPageTitle(
+              size: size,
+              title: HomeStrings.pageTitle,
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            // Cards
+            Expanded(
+              flex: 1,
+              child: Scrollbar(
+                thumbVisibility: true,
+                child: RefreshIndicator(
+                  onRefresh: () async => _homeController.refresh(),
+                  child: Obx(
+                    () => ListView(
+                      children: [
+                        if (_homeController.sorties.isEmpty)
+                          const SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                HomeStrings.emptyPlanningLabel,
+                                textAlign: TextAlign.center,
+                              ))
+                        else
+                          for (int i = 0;
+                              i < _homeController.sorties.length;
+                              i++)
+                            HomeCardItem(
+                              title: _homeController.sorties[i].marketName,
+                              number: _homeController.sorties[i].marketNumber,
+                              date: _homeController.sorties[i].programedDate,
+                              index: i + 1,
+                              isValidated:
+                                  _homeController.sorties[i].isValidated,
+                                  
+                              onOrdinaryTap: () =>
+                                  _homeController.moveToOrdinaryPage(i),
+                              onTakeAttachmentTap: () =>
+                                  _homeController.moveToTakeAttachmentPage(i),
+                            ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+now what i want is to make for each sortie,a button that let me download the CPS for that speciefed marche,which the sortie belongs to

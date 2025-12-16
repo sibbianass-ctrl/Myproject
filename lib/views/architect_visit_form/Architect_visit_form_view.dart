@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_project/utils/resources/architect_visit_form/architect_visit_form_strings.dart';
 import 'package:my_project/widgets/check_box_list.dart';
 import 'package:my_project/widgets/custom_app_bar_2.dart';
 import 'package:my_project/widgets/labeled_container.dart';
@@ -43,7 +42,7 @@ class ArchitectVisitFormView extends StatelessWidget {
         // _controller.photoController.removeAll();
       },
       child: Scaffold(
-        appBar: CustomAppBar2(title: ArchitectVisitFormStrings.pageTitle),
+        appBar: CustomAppBar2(title: ''),
         body: LayoutBuilder(
           builder: (context, constraints) {
             // Define breakpoints for responsiveness

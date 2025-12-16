@@ -10,9 +10,9 @@ class SpaceTitle extends StatelessWidget {
     super.key,
   });
   final UserInfoService _userInfoService = UserInfoService();
-  Color color() => _userInfoService.spaceType == SpaceType.architecte
-      ? AppColors.architectSpaceColor
-      : AppColors.betSpaceColor;
+  // Color color() => _userInfoService.spaceType == SpaceType.architecte
+  //     ? AppColors.architectSpaceColor
+  //     : AppColors.betSpaceColor;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -20,7 +20,7 @@ class SpaceTitle extends StatelessWidget {
         Expanded(
           child: Container(
             height: 16,
-            color: color(),
+            color: AppColors.green,
           ),
         ),
         Container(
@@ -34,7 +34,7 @@ class SpaceTitle extends StatelessWidget {
         Expanded(
           child: Container(
             height: 16,
-            color: color(),
+            color: AppColors.green,
           ),
         )
       ],

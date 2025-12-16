@@ -1,7 +1,7 @@
 class AppStrings {
   // General
   static const String appTitle = 'My Project';
-  static const String versionLabel = 'Version 2.4.6';
+  static const String versionLabel = 'Version 2.5.0';
   static const String copyright =
       'Copyright © 2025, DGNTI / Province Berkane / Maroc';
 
@@ -63,4 +63,11 @@ class AppStrings {
   //Spaces
   static const String architectSpace = 'Espace Architecte';
 
+  //Others
+  static const String refresh = 'Actualiser';
+  static const String pages = 'Pages';
+  static const String total = 'Total';
+  static const String action = 'Action';
+  static const String details = 'Détails';
+  static const String otherDetails = 'Autres détails';
 }

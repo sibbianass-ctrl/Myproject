@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/utils/resources/global/price_list/price_list_strings.dart';
+import 'package:my_project/utils/resources/price_list/price_list_strings.dart';
 
 class CommentInputField extends StatelessWidget {
   final TextEditingController controller;

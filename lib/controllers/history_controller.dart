@@ -29,11 +29,6 @@ class HistoryController extends GetxController {
     Get.back();
   }
 
-  // getValidatedSortieById() {
-  //   return validatedSorties
-  //       .where((element) => element.visitType == VisitTypeEnum.ordinary)
-  //       .toList();
-  // }
 
   Future<void> refresh() async {
     validatedSorties.clear();

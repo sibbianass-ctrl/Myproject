@@ -6,6 +6,6 @@ class AppColors {
   static const Color green = const Color(0XFF0A6847);
   static const Color greenLite = const Color.fromARGB(255, 32, 221, 155);
   static const Color yallew = const Color(0XFFF6E9B2);
-  static const Color architectSpaceColor = const Color(0XFFF7931E);
-  static const Color betSpaceColor = const Color(0XFF663333);
+  // static const Color architectSpaceColor = Colors.blue;
+  // static const Color betSpaceColor = const Color(0XFF663333);
 }

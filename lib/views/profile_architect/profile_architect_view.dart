@@ -19,7 +19,7 @@ class ProfileArchitectView extends StatelessWidget {
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: const CustomAppBar2(
-        title: ProfileStrings.pageTitle,
+        title: '',
       ),
       body: Container(
         width: double.infinity,

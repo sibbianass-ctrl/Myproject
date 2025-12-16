@@ -3,7 +3,7 @@ import 'package:my_project/controllers/app_snackbar_controller.dart';
 import 'package:my_project/controllers/architect_visit_from_controller.dart';
 import 'package:my_project/controllers/price_list_architect_view_controller.dart';
 import 'package:my_project/models/dtos/get/lot_dto.dart';
-import 'package:my_project/utils/resources/global/price_list/price_list_strings.dart';
+import 'package:my_project/utils/resources/price_list/price_list_strings.dart';
 import '../routes/routes.dart';
 import '../services/api_service/commands_service.dart';
 import '../utils/resources/home/home_strings.dart';
@@ -41,10 +41,7 @@ class HomeArchitectController extends GetxController {
   moveToOrdinaryPage(int index) async {
     _architectVisitFormController.sortie.value.clear();
     _architectVisitFormController.sortie.value.setLot(lots[index]);
-    // _architectVisitFormController.sortie.value.objects = lots[index].objects;
-    // _architectVisitFormController.sortie.value.constats = lots[index].constats;
-    // _architectVisitFormController.sortie.value.recommendations =
-    //     lots[index].recommendations;
+
     Get.dialog(LoadingDialog(), barrierDismissible: false);
 
     _architectVisitFormController.sortie.value.objects
@@ -61,12 +58,13 @@ class HomeArchitectController extends GetxController {
     _priceListArchitectViewController.lot = lots[index];
     Get.dialog(LoadingDialog(), barrierDismissible: false);
     _priceListArchitectViewController.prestations =
-        await CommandsService.getLatestPricesList(lots[index].id, 'Architect');
+        await CommandsService.getLatestPricesList(lots[index].id,
+            'Architect'); //TODO: FIX : Check if we sent just architect or also bet
     Get.back();
     if (_priceListArchitectViewController.prestations.isEmpty) {
       snackbarWarrning(PriceListStrings.noPriceList);
     } else {
-      Get.to(() =>PriceListArchitectView());
+      Get.to(() => PriceListArchitectView());
     }
   }
 }

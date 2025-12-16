@@ -13,13 +13,7 @@ import 'app_snackbar_controller.dart';
 import 'photo_controller.dart';
 
 class ArchitectVisitFromController extends GetxController {
-  // RxString planningRespectValue = ''.obs;
-  // RxString cleanSiteValue = ''.obs;
-  // RxString siteOrganizationValue = ''.obs;
-  // RxString compliancePlansAndSpecificationsValue = ''.obs;
-  // RxString qualityEstimationValue = ''.obs;
-  // RxString workStateValue = ''.obs;
-  // RxString workRatetValue = ''.obs;
+
 
   Rx<Sortie> sortie = Sortie().obs;
   final PhotoController photoController = Get.put(PhotoController());

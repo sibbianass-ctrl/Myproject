@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_project/utils/resources/global/price_list/price_list_strings.dart';
+import 'package:my_project/utils/resources/price_list/price_list_strings.dart';
 import 'package:my_project/widgets/custom_app_bar_2.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import '../../controllers/price_list_architect_view_controller.dart';

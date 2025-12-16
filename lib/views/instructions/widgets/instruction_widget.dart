@@ -3,6 +3,8 @@ import 'package:my_project/utils/resources/global/app_colors.dart';
 import 'package:my_project/utils/resources/instructions/instructions_strings.dart';
 import 'package:my_project/widgets/custom_text_field.dart';
 
+import '../../../utils/responsive_utils.dart';
+
 class InstructionWidget extends StatelessWidget {
   final String label;
   final String title;
@@ -11,13 +13,15 @@ class InstructionWidget extends StatelessWidget {
   final Function(String motif) onValidate;
   // You can specify this lit just InstructionButton
   final List<Widget> buttons;
+  final bool isDisplayOnly;
   InstructionWidget(
       {super.key,
       required this.title,
       required this.label,
       required this.buttons,
       required this.onEdit,
-      required this.onValidate});
+      required this.onValidate,
+      this.isDisplayOnly = false});
 
   @override
   Widget build(BuildContext context) {
@@ -32,54 +36,57 @@ class InstructionWidget extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(left: 8),
               child: Text(
-                '⬤ ${title}',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                '⚠️ ${title}',
+                style: TextStyle(fontSize: getResponsiveFontSize(context, 12), fontWeight: FontWeight.bold),
               ),
             ),
-            IconButton(onPressed: () => onEdit(), icon: Icon(Icons.edit))
+            if (!isDisplayOnly)
+              IconButton(onPressed: () => onEdit(), icon: Icon(Icons.edit))
           ],
         ),
         Container(
             margin: EdgeInsets.only(left: 8, bottom: 16),
             child: Text(
               '━ $label',
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: getResponsiveFontSize(context, 11)),
             )),
-        // buttons ------------------------------------------
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: buttons,
-          ),
-        ),
 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Container(
-                margin: EdgeInsets.only(left: 8, bottom: 4),
-                child: CustomTextField(
-                  controller: textEditingController,
-                  icon: Icons.info_outline,
-                  color: Colors.grey,
-                  hintText: InstructionsStrings.motif,
-                  showText: false,
+        // buttons ------------------------------------------
+        if (!isDisplayOnly)
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: buttons,
+            ),
+          ),
+        if (!isDisplayOnly)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  margin: EdgeInsets.only(left: 8, bottom: 4),
+                  child: CustomTextField(
+                    controller: textEditingController,
+                    icon: Icons.info_outline,
+                    color: Colors.grey,
+                    hintText: InstructionsStrings.motif,
+                    showText: false,
+                  ),
                 ),
               ),
-            ),
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                    color: AppColors.greyLite,
-                    borderRadius: BorderRadius.circular(8)),
-                child: IconButton(
-                    onPressed: () => onValidate(textEditingController.text),
-                    icon: Icon(Icons.send)))
-          ],
-        ),
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                      color: AppColors.greyLite,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: IconButton(
+                      onPressed: () => onValidate(textEditingController.text),
+                      icon: Icon(Icons.send)))
+            ],
+          ),
       ],
     );
   }

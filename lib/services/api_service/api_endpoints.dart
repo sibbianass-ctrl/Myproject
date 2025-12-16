@@ -8,18 +8,15 @@ final class ApiEndpoints {
 
   static UserInfoService _userInfoService = UserInfoService();
 
-  
-
-  
-
   //AUTH
   static String get loginEndpoint =>
-      '${_authUrl}realms/province/protocol/openid-connect/token';
+      '${_authUrl}realms/province_settat/protocol/openid-connect/token';
   static String get getUserRole =>
       '${_apiBaseUrl}cp-my-project/following-up-phases/Info-compte/${_userInfoService.id}';
 
   //GET
-  static String get getUserInfoByToken => '${_authUrl}realms/province/account';
+  static String get getUserInfoByToken =>
+      '${_authUrl}realms/province_settat/account';
   static String get getTechnician =>
       '${_apiBaseUrl}cp-my-project/following-up-phases/person/${_userInfoService.id}';
   static String get getObjectsList =>
@@ -32,18 +29,28 @@ final class ApiEndpoints {
       '${_apiBaseUrl}cp-my-project/following-up-phases/sortie/find-sorties-by-technician-id/${_userInfoService.id}';
   static String get getInstructions =>
       '${_apiBaseUrl}cp-my-project/get-lot-instriction/${_userInfoService.tecId}';
+  static String get getGovernerInstruction =>
+      '${_apiBaseUrl}cp-my-project/get-governor-instruction-by-Entreprise-id/${_userInfoService.enterpriseId}?';
   static String get getValidatedSorties =>
       '${_apiBaseUrl}cp-my-project/following-up-phases/sortie/find-sorties-by-technician-id-true/${_userInfoService.id}';
+  static String get getSortiesCount =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/count-sortie-validate/';
   static String get getUserById =>
       '${_apiBaseUrl}cp-my-project/following-up-phases/person/${_userInfoService.id}';
   static String get saveNotificationId =>
       '${_apiBaseUrl}cp-my-project/programing-phases/persons';
   static String get getAllLotsByUserId =>
       '${_apiBaseUrl}cp-my-project/following-up-phases/get-lot/${_userInfoService.id}/${_userInfoService.spaceType.name}';
-  static String get getLatestPricesList => '${_apiBaseUrl}cp-my-project/following-up-phases/get-lot-validated-bet-or-architect?lotId=';
-  static String get getEntreprise => '${_apiBaseUrl}cp-my-project/following-up-phases/enterprise/';
+  static String get getLatestPricesList =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/get-lot-validated-bet-or-architect?lotId=';
+  static String get getEntreprise =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/enterprise/';
+  static String get getSuiteReserved =>
+      '${_apiBaseUrl}cp-my-project/get-reserved-suite-status';
 
   //POST
+  static String get saveSuiteReserved =>
+      '${_apiBaseUrl}cp-my-project/save-reserved-suite-status';
   static String get postVisite =>
       '${_apiBaseUrl}cp-my-project/following-up-phases/sortie';
   static String get postVisiteArchitectAndBET =>
@@ -54,6 +61,8 @@ final class ApiEndpoints {
       '${_apiBaseUrl}cp-my-project/update-meeting-description/';
   static String get postValidationPriceList =>
       '${_apiBaseUrl}cp-my-project/following-up-phases/update-sortie/';
+  static String get saveGovernorInstruction =>
+      '${_apiBaseUrl}cp-my-project/save-governor-instruction';
 
   //FILE
   static String get uploadFile => '${_fileURL}uploadFile';

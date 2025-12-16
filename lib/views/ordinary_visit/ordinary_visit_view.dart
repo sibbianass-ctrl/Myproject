@@ -83,7 +83,7 @@ class OrdinaryVisitView extends StatelessWidget {
                         style: const TextStyle(fontSize: _fontSizeTitleLabel),
                       ),
                       Text(
-                        "${AppStrings.visiteNumberLabel}: ${'3'}", //TODO: Implement
+                        "${AppStrings.visiteNumberLabel}: ${_controller.sortiesCount+1}",
                         style: const TextStyle(fontSize: _fontSizeTitleLabel),
                       ),
 

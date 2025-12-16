@@ -16,7 +16,7 @@ class HomeArchitectView extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
-      appBar: const CustomAppBar2(title: HomeArchitectStrings.pageTitle),
+      appBar: const CustomAppBar2(title: ''),
       body: Container(
         width: double.infinity,
         margin: EdgeInsets.symmetric(horizontal: size.width * .05),

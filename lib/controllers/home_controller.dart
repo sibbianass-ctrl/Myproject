@@ -34,6 +34,11 @@ class HomeController extends GetxController {
 
   moveToOrdinaryPage(int index) async {
     _oridnaryVisitController.sortie.value = sorties[index];
+    Get.dialog(LoadingDialog(), barrierDismissible: false);
+    _oridnaryVisitController.sortiesCount =
+        await CommandsService.getSortiesCount(
+            sorties[index].marketId); // get the count of sorties
+    Get.back();
     await Get.toNamed(Routes.ordinaryVisitPage);
     sorties.refresh();
   }
@@ -43,6 +48,10 @@ class HomeController extends GetxController {
     _attachmentController.filteredItems.clear();
     _attachmentController.searchQuery.value = '';
     _attachmentController.filterItems();
+    Get.dialog(LoadingDialog(), barrierDismissible: false);
+    _attachmentController.sortiesCount = await CommandsService.getSortiesCount(
+        sorties[index].marketId); // get the count of sorties
+    Get.back();
     await Get.toNamed(Routes.takeAttachmentVisitPage);
     sorties.refresh();
   }

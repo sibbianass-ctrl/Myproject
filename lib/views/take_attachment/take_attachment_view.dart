@@ -32,7 +32,7 @@ class TakeAttachmentView extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return PopScope(
-      onPopInvokedWithResult : (v,d) {
+      onPopInvokedWithResult: (v, d) {
         _controller.photoController.removeAll();
       },
       child: Scaffold(
@@ -81,7 +81,7 @@ class TakeAttachmentView extends StatelessWidget {
                           ],
                         ),
                       ),
-      
+
                       const SizedBox(height: 32),
                       // Visit Details
                       Text(
@@ -89,13 +89,13 @@ class TakeAttachmentView extends StatelessWidget {
                         style: const TextStyle(fontSize: _fontSizeTitleLabel),
                       ),
                       Text(
-                        "${AppStrings.visiteNumberLabel}: ${'3'}", //TODO: Implement
+                        "${AppStrings.visiteNumberLabel}: ${_controller.sortiesCount + 1}",
                         style: const TextStyle(fontSize: _fontSizeTitleLabel),
                       ),
-      
+
                       //Divider
                       const Divider(),
-      
+
                       //Etat de chantier
                       const Text(
                         '${AppStrings.workStateLabel}:',
@@ -123,9 +123,9 @@ class TakeAttachmentView extends StatelessWidget {
                             },
                           ),
                         ),
-      
+
                       const SizedBox(height: 24),
-      
+
                       //Cadence des Travaux
                       const Text(
                         '${AppStrings.workRateLabel}:',
@@ -231,12 +231,12 @@ class TakeAttachmentView extends StatelessWidget {
                       //     ],
                       //   ),
                       // ),
-      
+
                       PhotoPicker(photoController: _controller.photoController),
-      
+
                       //=============================================================================
                       const SizedBox(height: 24),
-      
+
                       // Bordereau des prix - détail estimatif
                       const Text(
                         '${TakeAttachmentVisitStrings.priceListLabel}:',
@@ -248,8 +248,8 @@ class TakeAttachmentView extends StatelessWidget {
                           // Search TextField
                           TextField(
                             decoration: InputDecoration(
-                              hintText:
-                                  TakeAttachmentVisitStrings.searchHintTextField,
+                              hintText: TakeAttachmentVisitStrings
+                                  .searchHintTextField,
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.0)),
                               suffixIcon: IconButton(
@@ -276,7 +276,8 @@ class TakeAttachmentView extends StatelessWidget {
                                 return ListView.builder(
                                   itemCount: _controller.filteredItems.length,
                                   itemBuilder: (context, index) {
-                                    final item = _controller.filteredItems[index];
+                                    final item =
+                                        _controller.filteredItems[index];
                                     return Card(
                                       color: const Color.fromARGB(
                                           255, 224, 224, 224),
@@ -291,7 +292,8 @@ class TakeAttachmentView extends StatelessWidget {
                                                   // Check status
                                                   if (item.isValidate)
                                                     const Icon(
-                                                      Icons.check_circle_rounded,
+                                                      Icons
+                                                          .check_circle_rounded,
                                                       color: AppColors.green,
                                                     )
                                                   else
@@ -312,14 +314,15 @@ class TakeAttachmentView extends StatelessWidget {
                                                 ],
                                               ),
                                             ),
-                                            onTap: () =>
-                                                _controller.toggleExpanded(index),
+                                            onTap: () => _controller
+                                                .toggleExpanded(index),
                                           ),
                                           if (item.isExpanded)
                                             //Content Sub cards
                                             Container(
-                                              margin: const EdgeInsets.symmetric(
-                                                  vertical: 8.0),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8.0),
                                               child: Column(
                                                 children: [
                                                   //Sub cards ---------
@@ -356,7 +359,8 @@ class TakeAttachmentView extends StatelessWidget {
                                                   ),
                                                   Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       const SizedBox(
                                                         width: 12,
@@ -364,15 +368,18 @@ class TakeAttachmentView extends StatelessWidget {
                                                       Expanded(
                                                         flex: 1,
                                                         child: Container(
-                                                          margin: const EdgeInsets
-                                                              .all(8.0),
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
                                                           decoration: BoxDecoration(
-                                                              color: Colors.white,
+                                                              color:
+                                                                  Colors.white,
                                                               borderRadius:
                                                                   BorderRadius.circular(
                                                                       AppDimensions
                                                                           .borderRadius)),
-                                                          child: CustomTextField(
+                                                          child:
+                                                              CustomTextField(
                                                             controller:
                                                                 item.controller,
                                                             showText: false,
@@ -392,8 +399,8 @@ class TakeAttachmentView extends StatelessWidget {
                                                             .symmetric(
                                                             horizontal: 8),
                                                         child: CustomButton(
-                                                          buttonText:
-                                                              AppStrings.validate,
+                                                          buttonText: AppStrings
+                                                              .validate,
                                                           fontSize: 11,
                                                           onPressed: () {
                                                             _controller
@@ -428,7 +435,7 @@ class TakeAttachmentView extends StatelessWidget {
                       //----------------------------------------------------------------------------------------------
                       // Validate Button
                       const SizedBox(height: 24),
-      
+
                       Center(
                         child: ElevatedButton(
                           onPressed: () {
@@ -453,9 +460,9 @@ class TakeAttachmentView extends StatelessWidget {
                           ),
                         ),
                       ),
-      
+
                       const SizedBox(height: 24),
-      
+
                       // Footer Copyright
                       // const CopyrightText(),
                       const Center(

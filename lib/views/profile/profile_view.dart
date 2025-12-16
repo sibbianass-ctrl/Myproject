@@ -1,7 +1,326 @@
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:my_project/controllers/profile_controller.dart';
+// import 'package:my_project/utils/constants.dart';
+// import 'package:my_project/views/profile/widgets/profile_section.dart';
+// import 'package:my_project/widgets/copyright_text.dart';
+// import '../../utils/resources/global/app_strings.dart';
+// import '../../utils/resources/profile/profile_strings.dart';
+// import '../../utils/responsive_utils.dart';
+// import '../../widgets/custom_app_bar.dart';
+// import '../../widgets/custom_page_title.dart';
+
+// class ProfileView extends StatelessWidget {
+//   ProfileView({super.key});
+//   final ProfileController _profileController = Get.put(ProfileController());
+//   @override
+//   Widget build(BuildContext context) {
+//     Size size = MediaQuery.sizeOf(context);
+//     return Scaffold(
+//       appBar: const CustomAppBar(),
+//       body: Container(
+//         width: double.infinity,
+//         margin: EdgeInsets.symmetric(horizontal: size.width * .08),
+//         child: Column(
+//           children: [
+//             //Title
+//             CustomPageTitle(
+//               size: size,
+//               title: ProfileStrings.pageTitle,
+//             ),
+//             const SizedBox(
+//               height: 64,
+//             ),
+
+//             //Content --------------
+//             Expanded(
+//               flex: 1,
+//               child: Column(
+//                 children: [
+//                   //User info
+//                   Row(
+//                     children: [
+//                       Image.asset(
+//                           width: 53, height: 53, Constants.profileImgPath),
+//                       const SizedBox(
+//                         width: 8,
+//                       ),
+//                       Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Text(
+//                             _profileController.userInfoService.userFullName,
+//                             style: const TextStyle(
+//                                 fontWeight: FontWeight.bold, fontSize: 16),
+//                           ),
+//                           Text(
+//                             _profileController.userInfoService.username,
+//                             textAlign: TextAlign.start,
+//                             style: const TextStyle(
+//                                 fontSize: 12, color: Colors.grey),
+//                           )
+//                         ],
+//                       )
+//                     ],
+//                   ),
+//                   //Divider
+//                   const Divider(),
+//                   const SizedBox(
+//                     height: 12,
+//                   ),
+//                   ProfileSection(
+//                     contentText:
+//                         '${ProfileStrings.responsableNameSectionLabel}: ${_profileController.userInfoService.responsableName}',
+//                     icon: Icons.person,
+//                     onTap: () {},
+//                   ),
+//                   ProfileSection(
+//                     contentText:
+//                         '${ProfileStrings.responsableTelSectionLabel}: ${_profileController.userInfoService.responsablePhoneNumber}',
+//                     icon: Icons.phone,
+//                     onTap: () {},
+//                   ),
+//                   ProfileSection(
+//                     contentText: ProfileStrings.settingsLabel,
+//                     icon: Icons.settings,
+//                     onTap: () {},
+//                   ),
+//                   ProfileSection(
+//                     contentText: ProfileStrings.logOutLabel,
+//                     icon: Icons.power_settings_new_sharp,
+//                     onTap: _profileController.logout,
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             //------------------------
+//             const CopyrightText(),
+//             SizedBox(
+//                 width: double.infinity,
+//                 child: Text(
+//                   AppStrings.versionLabel,
+//                   textAlign: TextAlign.center,
+//                   style: TextStyle(
+//                     fontSize: getResponsiveFontSize(context, 10.0),
+//                   ),
+//                 )),
+//             SizedBox(
+//               height: 16,
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// lib/views/edit_profile/edit_profile_view.dart
+
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart'; // Nous avons besoin de Obx
+// import 'package:my_project/controllers/profile_controller.dart';
+
+// // <--- MODIFICATION : Devient un StatelessWidget
+// class EditProfileView extends StatelessWidget {
+
+//   // <--- AJOUT : Accepte le contrôleur en argument
+//   final ProfileController controller;
+
+//   const EditProfileView({
+//     super.key,
+//     required this.controller,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Modifier le profil'),
+//         actions: [
+//           // Gère l'état de chargement depuis le contrôleur
+//           Obx(() => controller.isLoading.value
+//               ? Padding(
+//                   padding: const EdgeInsets.all(16.0),
+//                   child: CircularProgressIndicator(
+//                     color: Colors.white,
+//                     strokeWidth: 2.0,
+//                   ),
+//                 )
+//               : IconButton(
+//                   icon: Icon(Icons.save),
+//                   // Appelle saveProfile du contrôleur
+//                   onPressed: controller.saveProfile,
+//                 )),
+//         ],
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         // Le Form utilise la clé du contrôleur
+//         child: Form(
+//           key: controller.formKey,
+//           child: Column(
+//             children: [
+//               TextFormField(
+//                 // Utilise le contrôleur de texte du ProfileController
+//                 controller: controller.nameController,
+//                 decoration: InputDecoration(
+//                   labelText: 'Nom du responsable',
+//                   icon: Icon(Icons.person),
+//                   border: OutlineInputBorder(),
+//                 ),
+//                 validator: (value) {
+//                   if (value == null || value.isEmpty) {
+//                     return 'Veuillez entrer un nom';
+//                   }
+//                   return null;
+//                 },
+//               ),
+//               SizedBox(height: 16),
+//               TextFormField(
+//                 // Utilise le contrôleur de texte du ProfileController
+//                 controller: controller.phoneController,
+//                 keyboardType: TextInputType.phone,
+//                 decoration: InputDecoration(
+//                   labelText: 'Téléphone du responsable',
+//                   icon: Icon(Icons.phone),
+//                   border: OutlineInputBorder(),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// code Sourtce
+
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:my_project/controllers/profile_controller.dart';
+// import 'package:my_project/utils/constants.dart';
+// import 'package:my_project/views/profile/widgets/profile_section.dart';
+// import 'package:my_project/widgets/copyright_text.dart';
+// import '../../utils/resources/global/app_strings.dart';
+// import '../../utils/resources/profile/profile_strings.dart';
+// import '../../utils/responsive_utils.dart';
+// import '../../widgets/custom_app_bar.dart';
+// import '../../widgets/custom_page_title.dart';
+
+// class ProfileView extends StatelessWidget {
+//   ProfileView({super.key});
+//   final ProfileController _profileController = Get.put(ProfileController());
+//   @override
+//   Widget build(BuildContext context) {
+//     Size size = MediaQuery.sizeOf(context);
+//     return Scaffold(
+//       appBar: const CustomAppBar(),
+//       body: Container(
+//         width: double.infinity,
+//         margin: EdgeInsets.symmetric(horizontal: size.width * .08),
+//         child: Column(
+//           children: [
+//             //Title
+//             CustomPageTitle(
+//               size: size,
+//               title: ProfileStrings.pageTitle,
+//             ),
+//             const SizedBox(
+//               height: 64,
+//             ),
+
+//             //Content --------------
+//             Expanded(
+//               flex: 1,
+//               child: Column(
+//                 children: [
+//                   //User info
+//                   Row(
+//                     children: [
+//                       Image.asset(
+//                           width: 53, height: 53, Constants.profileImgPath),
+//                       const SizedBox(
+//                         width: 8,
+//                       ),
+//                       Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Text(
+//                             _profileController.userInfoService.userFullName,
+//                             style: const TextStyle(
+//                                 fontWeight: FontWeight.bold, fontSize: 16),
+//                           ),
+//                           Text(
+//                             _profileController.userInfoService.username,
+//                             textAlign: TextAlign.start,
+//                             style: const TextStyle(
+//                                 fontSize: 12, color: Colors.grey),
+//                           )
+//                         ],
+//                       )
+//                     ],
+//                   ),
+//                   //Divider
+//                   const Divider(),
+//                   const SizedBox(
+//                     height: 12,
+//                   ),
+//                   ProfileSection(
+//                     contentText:
+//                         '${ProfileStrings.responsableNameSectionLabel}: ${_profileController.userInfoService.responsableName}',
+//                     icon: Icons.person,
+//                     onTap: () {},
+//                   ),
+//                   ProfileSection(
+//                     contentText:
+//                         '${ProfileStrings.responsableTelSectionLabel}: ${_profileController.userInfoService.responsablePhoneNumber}',
+//                     icon: Icons.phone,
+//                     onTap: () {},
+//                   ),
+//                   ProfileSection(
+//                     contentText: ProfileStrings.settingsLabel,
+//                     icon: Icons.settings,
+//                     onTap: () {},
+//                   ),
+//                   ProfileSection(
+//                     contentText: ProfileStrings.logOutLabel,
+//                     icon: Icons.power_settings_new_sharp,
+//                     onTap: _profileController.logout,
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             //------------------------
+//             const CopyrightText(),
+//             SizedBox(
+//                 width: double.infinity,
+//                 child: Text(
+//                   AppStrings.versionLabel,
+//                   textAlign: TextAlign.center,
+//                   style: TextStyle(
+//                     fontSize: getResponsiveFontSize(context, 10.0),
+//                   ),
+//                 )),
+//             SizedBox(
+//               height: 16,
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// lib/views/profile/profile_view.dart
+
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:my_project/controllers/profile_controller.dart';
 import 'package:my_project/utils/constants.dart';
+// <--- AJOUT : Importer le nouvel écran directement
+import 'package:my_project/views/edit_profile/edit_profile_view.dart';
 import 'package:my_project/views/profile/widgets/profile_section.dart';
 import 'package:my_project/widgets/copyright_text.dart';
 import '../../utils/resources/global/app_strings.dart';
@@ -9,12 +328,17 @@ import '../../utils/resources/profile/profile_strings.dart';
 import '../../utils/responsive_utils.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_page_title.dart';
+// Nous n'avons PAS besoin d'importer 'routes.dart' ici
 
-class ProfileView extends StatelessWidget {
+// <--- MODIFICATION : Devient un GetView
+class ProfileView extends GetView<ProfileController> {
   ProfileView({super.key});
-  final ProfileController _profileController = Get.put(ProfileController());
+
   @override
   Widget build(BuildContext context) {
+    // "put" le contrôleur pour qu'il soit disponible
+    final ProfileController _profileController = Get.put(ProfileController());
+
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: const CustomAppBar(),
@@ -48,17 +372,17 @@ class ProfileView extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            _profileController.userInfoService.userFullName,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                          Text(
-                            _profileController.userInfoService.username,
-                            textAlign: TextAlign.start,
-                            style: const TextStyle(
-                                fontSize: 12, color: Colors.grey),
-                          )
+                          Obx(() => Text(
+                                controller.userFullName.value,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              )),
+                          Obx(() => Text(
+                                controller.username.value,
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.grey),
+                              ))
                         ],
                       )
                     ],
@@ -68,27 +392,44 @@ class ProfileView extends StatelessWidget {
                   const SizedBox(
                     height: 12,
                   ),
-                  ProfileSection(
-                    contentText:
-                        '${ProfileStrings.responsableNameSectionLabel}: ${_profileController.userInfoService.responsableName}',
-                    icon: Icons.person,
-                    onTap: () {},
-                  ),
-                  ProfileSection(
-                    contentText:
-                        '${ProfileStrings.responsableTelSectionLabel}: ${_profileController.userInfoService.responsablePhoneNumber}',
-                    icon: Icons.phone,
-                    onTap: () {},
-                  ),
+                  Obx(() => ProfileSection(
+                        contentText:
+                            '${ProfileStrings.responsableNameSectionLabel}: ${controller.responsableName.value}',
+                        icon: Icons.person,
+                        onTap: () {},
+                      )),
+                  Obx(() => ProfileSection(
+                        contentText:
+                            '${ProfileStrings.responsableTelSectionLabel}: ${controller.responsablePhoneNumber.value}',
+                        icon: Icons.phone,
+                        onTap: () {},
+                      )),
+
+                  // <--- MODIFICATION DU BOUTON "PARAMÈTRES"
                   ProfileSection(
                     contentText: ProfileStrings.settingsLabel,
                     icon: Icons.settings,
-                    onTap: () {},
+                    onTap: () {
+                      // 1. Prépare les champs pour l'écran d'édition
+                      controller.initEditFields();
+
+                      // 2. Navigue avec MaterialPageRoute
+                      // Nous passons le contrôleur directement.
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditProfileView(
+                            controller: controller,
+                          ),
+                        ),
+                      );
+                    },
                   ),
+
                   ProfileSection(
                     contentText: ProfileStrings.logOutLabel,
                     icon: Icons.power_settings_new_sharp,
-                    onTap: _profileController.logout,
+                    onTap: controller.logout,
                   ),
                 ],
               ),
