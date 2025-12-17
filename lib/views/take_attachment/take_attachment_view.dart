@@ -15,24 +15,40 @@ import 'package:my_project/views/ordinary_visit/widgets/chrono_card.dart';
 
 class TakeAttachmentView extends StatelessWidget {
   TakeAttachmentView({super.key});
+
   final TakeAttachmentController _controller =
       Get.put(TakeAttachmentController());
 
   static const double _fontSizeTitleLabel = 14;
   static const double _fontSizeSubTitleLabel = 13;
+
   final List<String> workStatusItems = [
     AppStrings.workOnState,
-    AppStrings.workOffState
+    AppStrings.workOffState,
   ];
+
   final List<String> workRateItems = [
     AppStrings.workGoodState,
     AppStrings.workMediumState,
-    AppStrings.workMediocreState
+    AppStrings.workMediocreState,
   ];
+
+  String _formatDate(String? isoDate) {
+    if (isoDate == null || isoDate.isEmpty) return '-';
+    try {
+      final date = DateTime.parse(isoDate);
+      return '${date.day.toString().padLeft(2, '0')}/'
+          '${date.month.toString().padLeft(2, '0')}/'
+          '${date.year}';
+    } catch (_) {
+      return isoDate;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.sizeOf(context);
+    final size = MediaQuery.sizeOf(context);
+
     return PopScope(
       onPopInvokedWithResult: (v, d) {
         _controller.photoController.removeAll();
@@ -41,8 +57,8 @@ class TakeAttachmentView extends StatelessWidget {
         appBar: const CustomAppBar(),
         body: LayoutBuilder(
           builder: (context, constraints) {
-            // Define breakpoints for responsiveness
-            bool isTablet = constraints.maxWidth > 600;
+            final isTablet = constraints.maxWidth > 600;
+
             return Scrollbar(
               thumbVisibility: true,
               child: SingleChildScrollView(
@@ -54,61 +70,72 @@ class TakeAttachmentView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      //------------ Title ----------------------
                       Center(
                         child: Column(
                           children: [
                             Text(
                               _controller.sortie.value.marketName,
-                              // AppStringsUtils.truncateWithEllipsis(
-                              //     _controller.sortie.value.marketName, 30),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
-                                fontSize: 15.0,
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              "${AppStrings.dateLabel}: ${_controller.sortie.value.programedDate}",
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                              ),
+                              '${AppStrings.dateLabel}: ${_controller.sortie.value.programedDate}',
+                              style: const TextStyle(fontSize: 14),
                             ),
                             Text(
-                              "${AppStrings.numberLabel}: ${_controller.sortie.value.marketNumber}",
+                              '${AppStrings.numberLabel}: ${_controller.sortie.value.marketNumber}',
                               style: const TextStyle(
-                                  fontSize: 14.0, color: AppColors.grey),
+                                fontSize: 14,
+                                color: AppColors.grey,
+                              ),
                             ),
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 32),
-                      // Visit Details
                       Text(
-                        "${AppStrings.visiteDateLabel}: ${_controller.sortie.value.currentDate.toIso8601String().split('T').first}",
+                        '${AppStrings.visiteDateLabel}: ${_controller.sortie.value.currentDate.toIso8601String().split('T').first}',
                         style: const TextStyle(fontSize: _fontSizeTitleLabel),
                       ),
                       Text(
-                        "${AppStrings.visiteNumberLabel}: ${_controller.sortiesCount + 1}",
+                        '${AppStrings.visiteNumberLabel}: ${_controller.sortiesCount + 1}',
                         style: const TextStyle(fontSize: _fontSizeTitleLabel),
                       ),
-
-                      //Divider
                       const Divider(),
                       Row(
                         children: [
-                          Expanded(child: DelayCard(sortie: _controller.sortie.value)),
+                          Expanded(
+                            child: DelayCard(sortie: _controller.sortie.value),
+                          ),
                           const SizedBox(width: 12),
-                          Expanded(child: ChronoCard(sortie: _controller.sortie.value)),
+                          Expanded(
+                            child: ChronoCard(sortie: _controller.sortie.value),
+                          ),
                         ],
                       ),
+                      const SizedBox(height: 12),
+                      Text(
+                        _controller.delayExecuteTextAr,
+                        textDirection: TextDirection.rtl,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        _controller.dateEffectStartTextAr,
+                        textDirection: TextDirection.rtl,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.black54,
+                        ),
+                      ),
                       const SizedBox(height: 24),
-
-
-
-                      //Etat de chantier
                       const Text(
                         '${AppStrings.workStateLabel}:',
                         style: TextStyle(fontSize: _fontSizeTitleLabel),
@@ -117,14 +144,11 @@ class TakeAttachmentView extends StatelessWidget {
                         Obx(
                           () => RadioListTile(
                             dense: true,
-                            visualDensity: const VisualDensity(
-                              horizontal: VisualDensity.minimumDensity,
-                              vertical: VisualDensity.minimumDensity,
-                            ),
                             title: Text(
                               workStatusItems[i],
                               style: const TextStyle(
-                                  fontSize: _fontSizeSubTitleLabel),
+                                fontSize: _fontSizeSubTitleLabel,
+                              ),
                             ),
                             value: i.toString(),
                             groupValue: _controller.sortie.value.workStateValue,
@@ -135,10 +159,7 @@ class TakeAttachmentView extends StatelessWidget {
                             },
                           ),
                         ),
-
                       const SizedBox(height: 24),
-
-                      //Cadence des Travaux
                       const Text(
                         '${AppStrings.workRateLabel}:',
                         style: TextStyle(fontSize: _fontSizeTitleLabel),
@@ -147,14 +168,11 @@ class TakeAttachmentView extends StatelessWidget {
                         Obx(
                           () => RadioListTile(
                             dense: true,
-                            visualDensity: const VisualDensity(
-                              horizontal: VisualDensity.minimumDensity,
-                              vertical: VisualDensity.minimumDensity,
-                            ),
                             title: Text(
                               workRateItems[i],
                               style: const TextStyle(
-                                  fontSize: _fontSizeSubTitleLabel),
+                                fontSize: _fontSizeSubTitleLabel,
+                              ),
                             ),
                             value: i.toString(),
                             groupValue: _controller.sortie.value.workRateValue,
@@ -166,120 +184,37 @@ class TakeAttachmentView extends StatelessWidget {
                           ),
                         ),
                       const SizedBox(height: 24),
-                      //Take photos ----------------------------------------------------
                       const Text(
                         '${AppStrings.takePhotos}:',
                         style: TextStyle(fontSize: _fontSizeTitleLabel),
                       ),
-                      // Container(
-                      //   width: double.infinity,
-                      //   padding: const EdgeInsets.all(8.0),
-                      //   decoration: BoxDecoration(
-                      //       border: Border.all(color: Colors.grey),
-                      //       borderRadius: BorderRadius.circular(8.0)),
-                      //   child: Column(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       InkWell(
-                      //         onTap: () => _photoController.pickImageFromCamera(),
-                      //         child: Image.asset(
-                      //           Constants.addPhotoPath,
-                      //           width: 64,
-                      //         ),
-                      //       ),
-                      //       const SizedBox(
-                      //         height: 32,
-                      //       ),
-                      //       Obx(() => Row(
-                      //             mainAxisAlignment:
-                      //                 MainAxisAlignment.spaceAround,
-                      //             children: [
-                      //               // Display the picked image
-                      //               for (File file in _photoController.photos)
-                      //                 SizedBox(
-                      //                   width: 64,
-                      //                   height: 64,
-                      //                   child: Stack(
-                      //                     children: [
-                      //                       Image.file(
-                      //                         file,
-                      //                         fit: BoxFit.cover,
-                      //                         width: 64,
-                      //                         height: 64,
-                      //                       ),
-                      //                       Row(
-                      //                         mainAxisAlignment:
-                      //                             MainAxisAlignment.end,
-                      //                         children: [
-                      //                           InkWell(
-                      //                             onTap: () => _photoController
-                      //                                 .removeByFile(file),
-                      //                             child: Container(
-                      //                               decoration: BoxDecoration(
-                      //                                   color: Colors.white,
-                      //                                   borderRadius:
-                      //                                       BorderRadius.circular(
-                      //                                           1000)),
-                      //                               child: const Icon(
-                      //                                 Icons.cancel,
-                      //                                 color: Colors.red,
-                      //                               ),
-                      //                             ),
-                      //                           )
-                      //                         ],
-                      //                       ),
-                      //                     ],
-                      //                   ),
-                      //                 ),
-                      //               for (int i = 0;
-                      //                   i < 3 - _photoController.photos.length;
-                      //                   i++)
-                      //                 Image.asset(
-                      //                   Constants.photoHintPath,
-                      //                   width: 64,
-                      //                 ),
-                      //             ],
-                      //           ))
-                      //     ],
-                      //   ),
-                      // ),
-
-                      PhotoPicker(photoController: _controller.photoController),
-
-                      //=============================================================================
+                      PhotoPicker(
+                        photoController: _controller.photoController,
+                      ),
                       const SizedBox(height: 24),
-
-                      // Bordereau des prix - détail estimatif
                       const Text(
                         '${TakeAttachmentVisitStrings.priceListLabel}:',
                         style: TextStyle(fontSize: _fontSizeTitleLabel),
                       ),
-                      //----------------------------------------------------------------------------------------------
                       Column(
                         children: [
-                          // Search TextField
                           TextField(
                             decoration: InputDecoration(
                               hintText: TakeAttachmentVisitStrings
                                   .searchHintTextField,
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8.0)),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                               suffixIcon: IconButton(
                                 icon: const Icon(Icons.search),
-                                onPressed: () {
-                                  _controller
-                                      .filterItems(); // Filter items when search button is clicked
-                                },
+                                onPressed: _controller.filterItems,
                               ),
                             ),
                             onChanged: (value) {
-                              // Update query in real-time
                               _controller.searchQuery.value = value;
-                              // _controller.cardItems.refresh();
                             },
                           ),
                           const SizedBox(height: 20),
-                          // List of filtered items (only visible after search)
                           SizedBox(
                             width: size.width * 0.9,
                             height: 300,
@@ -291,105 +226,91 @@ class TakeAttachmentView extends StatelessWidget {
                                     final item =
                                         _controller.filteredItems[index];
                                     return Card(
-                                      color: const Color.fromARGB(
-                                          255, 224, 224, 224),
+                                      color: const Color(0xFFE0E0E0),
                                       child: Column(
                                         children: [
                                           ListTile(
                                             dense: true,
-                                            title: SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
-                                              child: Row(
-                                                children: [
-                                                  // Check status
-                                                  if (item.isValidate)
-                                                    const Icon(
-                                                      Icons
-                                                          .check_circle_rounded,
-                                                      color: AppColors.green,
-                                                    )
-                                                  else
-                                                    const Icon(
-                                                      Icons.cancel_outlined,
-                                                      color: Colors.red,
-                                                    ),
-                                                  const SizedBox(
-                                                    width: 8.0,
+                                            title: Row(
+                                              children: [
+                                                Icon(
+                                                  item.isValidate
+                                                      ? Icons
+                                                          .check_circle_rounded
+                                                      : Icons.cancel_outlined,
+                                                  color: item.isValidate
+                                                      ? AppColors.green
+                                                      : Colors.red,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  item.label,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                  Text(
-                                                    item.label,
-                                                    style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                             onTap: () => _controller
                                                 .toggleExpanded(index),
                                           ),
                                           if (item.isExpanded)
-                                            //Content Sub cards
-                                            Container(
-                                              margin:
+                                            Padding(
+                                              padding:
                                                   const EdgeInsets.symmetric(
-                                                      vertical: 8.0),
+                                                      vertical: 8),
                                               child: Column(
                                                 children: [
-                                                  //Sub cards ---------
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .spaceEvenly,
                                                     children: [
                                                       SubCardItem(
-                                                          size: size,
-                                                          title: TakeAttachmentVisitStrings
-                                                              .initialQuantityLabel,
-                                                          value: item
-                                                              .initialQuantity,
-                                                          unit: item.unit),
+                                                        size: size,
+                                                        title: TakeAttachmentVisitStrings
+                                                            .initialQuantityLabel,
+                                                        value: item
+                                                            .initialQuantity,
+                                                        unit: item.unit,
+                                                      ),
                                                       SubCardItem(
-                                                          size: size,
-                                                          title: TakeAttachmentVisitStrings
-                                                              .quantityConsumedLabel,
-                                                          value: item
-                                                              .quantityConsumed,
-                                                          unit: item.unit),
+                                                        size: size,
+                                                        title: TakeAttachmentVisitStrings
+                                                            .quantityConsumedLabel,
+                                                        value: item
+                                                            .quantityConsumed,
+                                                        unit: item.unit,
+                                                      ),
                                                       SubCardItem(
-                                                          size: size,
-                                                          title: TakeAttachmentVisitStrings
-                                                              .remainingQuantityLabel,
-                                                          value: item
-                                                              .remainingQuantity,
-                                                          unit: item.unit)
+                                                        size: size,
+                                                        title: TakeAttachmentVisitStrings
+                                                            .remainingQuantityLabel,
+                                                        value: item
+                                                            .remainingQuantity,
+                                                        unit: item.unit,
+                                                      ),
                                                     ],
                                                   ),
-                                                  const SizedBox(
-                                                    height: 8,
-                                                  ),
+                                                  const SizedBox(height: 8),
                                                   Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
                                                     children: [
-                                                      const SizedBox(
-                                                        width: 12,
-                                                      ),
                                                       Expanded(
-                                                        flex: 1,
                                                         child: Container(
                                                           margin:
                                                               const EdgeInsets
-                                                                  .all(8.0),
-                                                          decoration: BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                      AppDimensions
-                                                                          .borderRadius)),
+                                                                  .all(8),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                              AppDimensions
+                                                                  .borderRadius,
+                                                            ),
+                                                          ),
                                                           child:
                                                               CustomTextField(
                                                             controller:
@@ -406,23 +327,18 @@ class TakeAttachmentView extends StatelessWidget {
                                                           ),
                                                         ),
                                                       ),
-                                                      Container(
-                                                        margin: const EdgeInsets
-                                                            .symmetric(
-                                                            horizontal: 8),
-                                                        child: CustomButton(
-                                                          buttonText: AppStrings
-                                                              .validate,
-                                                          fontSize: 11,
-                                                          onPressed: () {
-                                                            _controller
-                                                                .addToQuantityConsumed(
-                                                                    item);
-                                                          },
-                                                        ),
-                                                      )
+                                                      CustomButton(
+                                                        buttonText:
+                                                            AppStrings.validate,
+                                                        fontSize: 11,
+                                                        onPressed: () {
+                                                          _controller
+                                                              .addToQuantityConsumed(
+                                                                  item);
+                                                        },
+                                                      ),
                                                     ],
-                                                  )
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -431,62 +347,52 @@ class TakeAttachmentView extends StatelessWidget {
                                     );
                                   },
                                 );
-                              } else if (_controller.searchQuery.isEmpty) {
-                                return const Center(
-                                    child: Text(TakeAttachmentVisitStrings
-                                        .searchTipLabel));
-                              } else {
-                                return const Center(
-                                    child: Text(TakeAttachmentVisitStrings
-                                        .noResultLabel));
                               }
+                              if (_controller.searchQuery.isEmpty) {
+                                return const Center(
+                                  child: Text(TakeAttachmentVisitStrings
+                                      .searchTipLabel),
+                                );
+                              }
+                              return const Center(
+                                child: Text(
+                                    TakeAttachmentVisitStrings.noResultLabel),
+                              );
                             }),
                           ),
                         ],
                       ),
-                      //----------------------------------------------------------------------------------------------
-                      // Validate Button
                       const SizedBox(height: 24),
-
                       Center(
                         child: ElevatedButton(
-                          onPressed: () {
-                            _controller.confirmValidation();
-                          },
+                          onPressed: _controller.confirmValidation,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.green,
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 40.0,
-                              vertical: 12.0,
+                              horizontal: 40,
+                              vertical: 12,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                           child: const Text(
                             AppStrings.validate,
                             style: TextStyle(
-                              fontSize: 16.0,
+                              fontSize: 16,
                               color: Colors.white,
                             ),
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 24),
-
-                      // Footer Copyright
-                      // const CopyrightText(),
                       const Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              AppStrings.copyright,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 12.0, color: Colors.black),
-                            ),
-                          ],
+                        child: Text(
+                          AppStrings.copyright,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ],

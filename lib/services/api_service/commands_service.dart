@@ -22,10 +22,6 @@ import '../user_info_service.dart';
 
 import 'package:my_project/models/lot_document.dart';
 
-
-
-
-
 class CommandsService {
   static final Dio _dio = Dio();
   static final _userInfo = UserInfoService();
@@ -43,7 +39,6 @@ class CommandsService {
   //     return null;
   //   }
   // }
-
 
   // static Future<List<LotDocument>> getLotDocuments(String lotId) async {
   //   if (!await _checkConnection()) return [];
@@ -161,8 +156,8 @@ class CommandsService {
         name: 'URL');
     try {
       final response = await _dio
-      // .get(ApiEndpoints.getRecommendationsList + '/${_userInfo.id}/$lotId');
-      .get(ApiEndpoints.getRecommendationsList );
+          // .get(ApiEndpoints.getRecommendationsList + '/${_userInfo.id}/$lotId');
+          .get(ApiEndpoints.getRecommendationsList);
       if (!await _isStatusCodeSuccess(response.statusCode)) return [];
       List<Map<String, dynamic>> recommendationsList = [];
       for (Map<String, dynamic> item in response.data) {
@@ -229,6 +224,56 @@ class CommandsService {
   //   // log(sorties.length.toString());
   //   return sorties;
   // }
+
+  /// Fetches lot details by ID from the enterprise API
+  /// Returns a map with delayExecuteDay and prevStartDate
+  static Future<Map<String, String?>> getLotById(String lotId) async {
+    if (!await _checkConnection()) return {};
+    try {
+      final response = await _dio.get('${ApiEndpoints.getLotById}$lotId');
+      if (!await _isStatusCodeSuccess(response.statusCode)) return {};
+      final data = response.data as Map<String, dynamic>?;
+      return {
+        'delayExecuteDay': data?['delayExecuteDay']?.toString(),
+        'prevStartDate': data?['prevStartDate']?.toString(),
+      };
+    } on DioException catch (_) {
+      // Silently fail - don't show error for this supplementary call
+      return {};
+    }
+  }
+
+  /// Fetches following-up phases by lot ID to get dateEffect
+  /// Returns the dateEffect for "Démarrage" status (official start date)
+  static Future<String?> getDateEffectByLotId(String lotId) async {
+    if (!await _checkConnection()) return null;
+    try {
+      final response =
+          await _dio.get('${ApiEndpoints.getFollowingUpPhasesByLotId}$lotId');
+      if (!await _isStatusCodeSuccess(response.statusCode)) return null;
+
+      final data = response.data as Map<String, dynamic>?;
+      if (data == null) return null;
+
+      // Parse followUpDetails to find "Démarrage" status
+      final followUpDetails = data['followUpDetails'] as List?;
+      if (followUpDetails == null) return null;
+
+      for (final detail in followUpDetails) {
+        final statusOrderService =
+            detail['statusOrderService'] as Map<String, dynamic>?;
+        final status = statusOrderService?['status']?.toString()?.toLowerCase();
+        if (status == 'démarrage') {
+          return detail['dateEffect']?.toString();
+        }
+      }
+      return null;
+    } on DioException catch (_) {
+      // Silently fail - don't show error for this supplementary call
+      return null;
+    }
+  }
+
   static Future<List<Sortie>> getAllPlanifiedSorties() async {
     if (!await _checkConnection()) return [];
     final List<Sortie> sorties = <Sortie>[];
@@ -239,19 +284,22 @@ class CommandsService {
       if (!await _isStatusCodeSuccess(response.statusCode)) return [];
 
       for (final Map<String, dynamic> s in response.data) {
+        final lotData = s['lotDto'] as Map<String, dynamic>?;
         final sortie = Sortie(
           id: s['id'],
-          marketId: s['lotDto']['id'],
-          marketName: s['lotDto']['titled'],
-          marketNumber: s['lotDto']['numbMarch'].toString(),
+          marketId: lotData?['id'] ?? '',
+          marketName: lotData?['titled'] ?? '',
+          marketNumber: lotData?['numbMarch']?.toString() ?? '',
           // Tu peux ajouter aussi l'heure si besoin
           programedDate: (s['planningDate'] as String).split('T').first,
           progressRate: 0,
           workStateValue: '',
           workRateValue: '',
+          delayExecuteDay: lotData?['delayExecuteDay']?.toString(),
+          prevStartDate: lotData?['prevStartDate']?.toString(),
           cardItemsPrestations: [
             for (final Map<String, dynamic> prestation
-            in s['priceSchedulePhaseS'])
+                in s['priceSchedulePhaseS'])
               Prestation(
                 id: prestation['id'],
                 label: prestation['serviceDescription'],
@@ -259,17 +307,17 @@ class CommandsService {
                 quantityConsumed: prestation['quantityConsumedlast'] == null
                     ? 0
                     : (prestation['quantityConsumedlast']['quantityConsumed'] ??
-                    0),
+                        0),
                 unit: prestation['unit'],
               ),
           ],
         );
 
         // Objets / constats / recommandations
-        sortie.objects.addAll(await getObjectsList(s['lotDto']['id']));
-        sortie.constats.addAll(await getConstatsList(s['lotDto']['id']));
-        sortie.recommendations
-            .addAll(await getRecommendationsList(s['lotDto']['id']));
+        final lotId = lotData?['id'] ?? '';
+        sortie.objects.addAll(await getObjectsList(lotId));
+        sortie.constats.addAll(await getConstatsList(lotId));
+        sortie.recommendations.addAll(await getRecommendationsList(lotId));
 
         // Photos liées à la sortie (même champ que pour ValidatedSortie)
         if (s['attachedDocument'] != null) {
@@ -453,7 +501,7 @@ class CommandsService {
       List<ValidatedSortie> validatedSorties = [];
       for (Map sortie in response.data) {
         validatedSorties.add(ValidatedSortie(
-            lotId: sortie['lotDto']['id'] ?? 'null',          // ✅ هنا
+            lotId: sortie['lotDto']['id'] ?? 'null', // ✅ هنا
             lotName: sortie['lotDto']['titled'] ?? 'null',
             lotNumber: sortie['lotDto']['numbMarch'] ?? 'null',
             // todo: you can add also the time
@@ -681,11 +729,6 @@ class CommandsService {
       return null;
     }
   }
-
-
-
-
-
 
   static Future<void> postValidationPriceList(
       String sortieId, String value) async {

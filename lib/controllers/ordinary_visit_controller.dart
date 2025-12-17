@@ -510,6 +510,51 @@ class OridnaryVisitController extends GetxController {
   List<String> files = <String>[];
   int sortiesCount = 0;
 
+  // ====== Arabic text getters for chrono info ======
+
+  /// Arabic formatted string for execution delay
+  String get delayExecuteTextAr {
+    final days = sortie.value.delayExecuteDay;
+    if (days == null || days.isEmpty) {
+      return 'مدة التنفيذ المتوقعة: غير محددة';
+    }
+    return 'مدة التنفيذ المتوقعة: $days يوم';
+  }
+
+  /// Arabic formatted string for expected start date
+  String get prevStartDateTextAr {
+    final dateStr = sortie.value.prevStartDate;
+    if (dateStr == null || dateStr.isEmpty) {
+      return 'تاريخ الانطلاق المتوقع: غير محدد';
+    }
+    try {
+      final date = DateTime.parse(dateStr);
+      final formatted = '${date.day.toString().padLeft(2, '0')}/'
+          '${date.month.toString().padLeft(2, '0')}/'
+          '${date.year}';
+      return 'تاريخ الانطلاق المتوقع: $formatted';
+    } catch (_) {
+      return 'تاريخ الانطلاق المتوقع: $dateStr';
+    }
+  }
+
+  /// Arabic formatted string for effective start date (from Démarrage status)
+  String get dateEffectStartTextAr {
+    final dateStr = sortie.value.dateEffectStart;
+    if (dateStr == null || dateStr.isEmpty) {
+      return 'تاريخ الانطلاق الفعلي: غير محدد';
+    }
+    try {
+      final date = DateTime.parse(dateStr);
+      final formatted = '${date.day.toString().padLeft(2, '0')}/'
+          '${date.month.toString().padLeft(2, '0')}/'
+          '${date.year}';
+      return 'تاريخ الانطلاق الفعلي: $formatted';
+    } catch (_) {
+      return 'تاريخ الانطلاق الفعلي: $dateStr';
+    }
+  }
+
   // ----- Helpers للـ IDs المختارة -----
 
   List<String> getSelectedObjectsIds() {
@@ -574,7 +619,7 @@ class OridnaryVisitController extends GetxController {
     if (!uploaded) return;
 
     // Loading global pendant l'appel API
-    Get.dialog( LoadingDialog(), barrierDismissible: false);
+    Get.dialog(LoadingDialog(), barrierDismissible: false);
 
     final ok = await CommandsService.postOrdinaryVisite(
       sortie.value,

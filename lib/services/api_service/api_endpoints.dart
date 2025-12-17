@@ -49,9 +49,12 @@ final class ApiEndpoints {
       '${_apiBaseUrl}cp-my-project/following-up-phases/get-lot-validated-bet-or-architect?lotId=';
   static String get getEntreprise =>
       '${_apiBaseUrl}cp-my-project/following-up-phases/enterprise/';
+  static String get getLotById =>
+      '${_apiBaseUrl}cp-my-project/enterprise/get-lot-by-id/';
+  static String get getFollowingUpPhasesByLotId =>
+      '${_apiBaseUrl}cp-my-project/following-up-phases/by-lot-id/';
   static String get getSuiteReserved =>
       '${_apiBaseUrl}cp-my-project/get-reserved-suite-status';
-
 
   //POST
   static String get saveSuiteReserved =>
@@ -73,11 +76,8 @@ final class ApiEndpoints {
   static String get uploadFile => '${_fileURL}uploadFile/';
 
   // نفس IP و port اللي عند صاحبك (بدّلهم إذا مختلفين عندك)
-  static String get launchingServiceBaseUrl =>
-      'http://172.16.20.233:8130/api';
+  static String get launchingServiceBaseUrl => 'http://172.16.20.233:8130/api';
 
   static String get downloadFile =>
       '${_fileURL}downloadFileSpecific/my_project/';
-
-
 }

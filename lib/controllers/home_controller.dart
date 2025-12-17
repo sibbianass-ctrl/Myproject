@@ -35,6 +35,24 @@ class HomeController extends GetxController {
   moveToOrdinaryPage(int index) async {
     _oridnaryVisitController.sortie.value = sorties[index];
     Get.dialog(LoadingDialog(), barrierDismissible: false);
+
+    // Fetch lot details (delayExecuteDay, prevStartDate) from the enterprise API
+    final lotData = await CommandsService.getLotById(sorties[index].marketId);
+    if (lotData.isNotEmpty) {
+      _oridnaryVisitController.sortie.value.delayExecuteDay =
+          lotData['delayExecuteDay'];
+      _oridnaryVisitController.sortie.value.prevStartDate =
+          lotData['prevStartDate'];
+    }
+
+    // Fetch dateEffect (effective start date) from following-up phases API
+    final dateEffect =
+        await CommandsService.getDateEffectByLotId(sorties[index].marketId);
+    if (dateEffect != null) {
+      _oridnaryVisitController.sortie.value.dateEffectStart = dateEffect;
+    }
+    _oridnaryVisitController.sortie.refresh();
+
     _oridnaryVisitController.sortiesCount =
         await CommandsService.getSortiesCount(
             sorties[index].marketId); // get the count of sorties
@@ -49,6 +67,24 @@ class HomeController extends GetxController {
     _attachmentController.searchQuery.value = '';
     _attachmentController.filterItems();
     Get.dialog(LoadingDialog(), barrierDismissible: false);
+
+    // Fetch lot details (delayExecuteDay, prevStartDate) from the enterprise API
+    final lotData = await CommandsService.getLotById(sorties[index].marketId);
+    if (lotData.isNotEmpty) {
+      _attachmentController.sortie.value.delayExecuteDay =
+          lotData['delayExecuteDay'];
+      _attachmentController.sortie.value.prevStartDate =
+          lotData['prevStartDate'];
+    }
+
+    // Fetch dateEffect (effective start date) from following-up phases API
+    final dateEffect =
+        await CommandsService.getDateEffectByLotId(sorties[index].marketId);
+    if (dateEffect != null) {
+      _attachmentController.sortie.value.dateEffectStart = dateEffect;
+    }
+    _attachmentController.sortie.refresh();
+
     _attachmentController.sortiesCount = await CommandsService.getSortiesCount(
         sorties[index].marketId); // get the count of sorties
     Get.back();
