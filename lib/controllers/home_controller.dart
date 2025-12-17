@@ -53,6 +53,9 @@ class HomeController extends GetxController {
     }
     _oridnaryVisitController.sortie.refresh();
 
+    // Start the countdown timer after data is loaded
+    _oridnaryVisitController.startCountdown();
+
     _oridnaryVisitController.sortiesCount =
         await CommandsService.getSortiesCount(
             sorties[index].marketId); // get the count of sorties
@@ -84,6 +87,9 @@ class HomeController extends GetxController {
       _attachmentController.sortie.value.dateEffectStart = dateEffect;
     }
     _attachmentController.sortie.refresh();
+
+    // Start the countdown timer after data is loaded
+    _attachmentController.startCountdown();
 
     _attachmentController.sortiesCount = await CommandsService.getSortiesCount(
         sorties[index].marketId); // get the count of sorties

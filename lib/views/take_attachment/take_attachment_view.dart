@@ -113,7 +113,11 @@ class TakeAttachmentView extends StatelessWidget {
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: ChronoCard(sortie: _controller.sortie.value),
+                            child: Obx(() => ChronoCard(
+                                  hmsText: _controller.chronoHMS,
+                                  daysRemainingText:
+                                      _controller.chronoDaysRemaining,
+                                )),
                           ),
                         ],
                       ),

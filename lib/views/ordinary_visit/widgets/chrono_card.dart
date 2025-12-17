@@ -1,49 +1,46 @@
-// chrono_card.dart
+﻿// chrono_card.dart
 import 'package:flutter/material.dart';
-import 'package:my_project/models/sortie.dart';
 
+/// A dynamic countdown CHRONO card that displays remaining time.
+/// 
+/// This widget displays:
+/// - HH:MM:SS countdown (hours:minutes:seconds)
+/// - X jours restants (days remaining)
+/// 
+/// The widget is designed to be used with Obx wrapper in the parent
+/// to react to changes in the countdown values.
 class ChronoCard extends StatelessWidget {
-  final Sortie sortie;
-  const ChronoCard({super.key, required this.sortie});
+  /// The formatted time string (e.g., "12 : 34 : 56" or "-- : -- : --")
+  final String hmsText;
+  
+  /// The formatted days remaining text (e.g., "45 jours restants" or "- jours restants")
+  final String daysRemainingText;
 
-  DateTime? _parseProgrammed() {
-    try {
-      return DateTime.parse(sortie.programedDate);
-    } catch (_) {
-      return null;
-    }
-  }
+  const ChronoCard({
+    super.key,
+    required this.hmsText,
+    required this.daysRemainingText,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final start = _parseProgrammed() ?? DateTime.now();
-    final now = DateTime.now();
-    final diff = now.difference(start);
-
-    final days = diff.inDays;
-    final hours = diff.inHours.remainder(24);
-    final minutes = diff.inMinutes.remainder(60);
-    final seconds = diff.inSeconds.remainder(60);
-
-    final hms =
-        '${hours.toString().padLeft(2, '0')} : ${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
-
     return _BaseDelayChronoCard(
       color: const Color(0xFF26C6DA),
-      icon: Icons.refresh,
+      icon: Icons.timer_outlined,
       title: 'CHRONO',
       center: Text(
-        hms,
+        hmsText,
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
       bottom: Text(
-        '$days jours d’exécution',
+        daysRemainingText,
         style: const TextStyle(fontSize: 11),
       ),
     );
   }
 }
-// tu peux le mettre dans un des deux fichiers (au-dessus) ou fichier séparé
+
+/// Internal base card widget for consistent styling.
 class _BaseDelayChronoCard extends StatelessWidget {
   final Color color;
   final IconData icon;

@@ -100,8 +100,12 @@ class OrdinaryVisitView extends StatelessWidget {
                                   DelayCard(sortie: _controller.sortie.value)),
                           const SizedBox(width: 12),
                           Expanded(
-                              child:
-                                  ChronoCard(sortie: _controller.sortie.value)),
+                            child: Obx(() => ChronoCard(
+                                  hmsText: _controller.chronoHMS,
+                                  daysRemainingText:
+                                      _controller.chronoDaysRemaining,
+                                )),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 12),
