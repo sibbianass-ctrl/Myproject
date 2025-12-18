@@ -106,38 +106,28 @@ class TakeAttachmentView extends StatelessWidget {
                         style: const TextStyle(fontSize: _fontSizeTitleLabel),
                       ),
                       const Divider(),
-                      Row(
+                      Column(
                         children: [
-                          Expanded(
-                            child: DelayCard(sortie: _controller.sortie.value),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
+                          SizedBox(
+                            width: double.infinity,
                             child: Obx(() => ChronoCard(
                                   hmsText: _controller.chronoHMS,
                                   daysRemainingText:
                                       _controller.chronoDaysRemaining,
                                 )),
                           ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Obx(() => DelayCard(
+                                  realStartText: _controller.realStartText,
+                                  realEndText: _controller.realEndText,
+                                  plannedStartText:
+                                      _controller.plannedStartText,
+                                  plannedEndText: _controller.plannedEndText,
+                                )),
+                          ),
                         ],
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        _controller.delayExecuteTextAr,
-                        textDirection: TextDirection.rtl,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        _controller.dateEffectStartTextAr,
-                        textDirection: TextDirection.rtl,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.black54,
-                        ),
                       ),
                       const SizedBox(height: 24),
                       const Text(

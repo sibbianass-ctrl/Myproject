@@ -75,7 +75,6 @@ final class ApiEndpoints {
   // FILE
   static String get uploadFile => '${_fileURL}uploadFile/';
 
-  // نفس IP و port اللي عند صاحبك (بدّلهم إذا مختلفين عندك)
   static String get launchingServiceBaseUrl => 'http://172.16.20.233:8130/api';
 
   static String get downloadFile =>

@@ -92,41 +92,29 @@ class OrdinaryVisitView extends StatelessWidget {
                       ),
 
                       const Divider(),
-                      // ... après SizedBox(height: 32),
-                      Row(
+                      Column(
                         children: [
-                          Expanded(
-                              child:
-                                  DelayCard(sortie: _controller.sortie.value)),
-                          const SizedBox(width: 12),
-                          Expanded(
+                          SizedBox(
+                            width: double.infinity,
                             child: Obx(() => ChronoCard(
                                   hmsText: _controller.chronoHMS,
                                   daysRemainingText:
                                       _controller.chronoDaysRemaining,
                                 )),
                           ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Obx(() => DelayCard(
+                                  realStartText: _controller.realStartText,
+                                  realEndText: _controller.realEndText,
+                                  plannedStartText:
+                                      _controller.plannedStartText,
+                                  plannedEndText: _controller.plannedEndText,
+                                )),
+                          ),
                         ],
                       ),
-                      const SizedBox(height: 12),
-                      // === Arabic dynamic text paragraphs ===
-                      Obx(() => Text(
-                            _controller.delayExecuteTextAr,
-                            textDirection: TextDirection.rtl,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.black87,
-                            ),
-                          )),
-                      const SizedBox(height: 6),
-                      Obx(() => Text(
-                            _controller.dateEffectStartTextAr,
-                            textDirection: TextDirection.rtl,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.black54,
-                            ),
-                          )),
                       const SizedBox(height: 24),
 
                       // Etat de chantier

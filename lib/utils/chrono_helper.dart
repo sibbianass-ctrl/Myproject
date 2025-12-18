@@ -89,4 +89,53 @@ class ChronoHelper {
     return parseDelayDays(delayExecuteDay) != null &&
         parseDateEffect(dateEffectStart) != null;
   }
+
+  // ====== DÉLAI Card Helpers ======
+
+  /// Formats a DateTime to dd/MM/yyyy string.
+  /// Returns '-' if date is null.
+  static String formatDate(DateTime? date) {
+    if (date == null) {
+      return '-';
+    }
+    return '${date.day.toString().padLeft(2, '0')}/'
+        '${date.month.toString().padLeft(2, '0')}/'
+        '${date.year}';
+  }
+
+  /// Parses a date string and formats it to dd/MM/yyyy.
+  /// Returns '-' if parsing fails or input is null/empty.
+  static String formatDateString(String? dateStr) {
+    final date = parseDateEffect(dateStr);
+    return formatDate(date);
+  }
+
+  /// Calculates end date by adding delay days to start date.
+  /// Returns null if either input is invalid.
+  static DateTime? calculateEndDate({
+    required String? startDateStr,
+    required String? delayExecuteDay,
+  }) {
+    final startDate = parseDateEffect(startDateStr);
+    final delayDays = parseDelayDays(delayExecuteDay);
+
+    if (startDate == null || delayDays == null) {
+      return null;
+    }
+
+    return startDate.add(Duration(days: delayDays));
+  }
+
+  /// Formats the end date (start + delay days) as dd/MM/yyyy.
+  /// Returns '-' if calculation is not possible.
+  static String formatEndDate({
+    required String? startDateStr,
+    required String? delayExecuteDay,
+  }) {
+    final endDate = calculateEndDate(
+      startDateStr: startDateStr,
+      delayExecuteDay: delayExecuteDay,
+    );
+    return formatDate(endDate);
+  }
 }

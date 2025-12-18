@@ -80,50 +80,27 @@ class TakeAttachmentController extends GetxController {
     super.onClose();
   }
 
-  // ====== Arabic text getters for chrono info ======
+  // ====== DÉLAI Card Getters (French, no Arabic) ======
 
-  /// Arabic formatted string for execution delay
-  String get delayExecuteTextAr {
-    final days = sortie.value.delayExecuteDay;
-    if (days == null || days.isEmpty) {
-      return 'مدة التنفيذ المتوقعة: غير محددة';
-    }
-    return 'مدة التنفيذ المتوقعة: $days يوم';
-  }
+  /// Real start date (dateEffectStart from Démarrage status)
+  String get realStartText =>
+      ChronoHelper.formatDateString(sortie.value.dateEffectStart);
 
-  /// Arabic formatted string for expected start date
-  String get prevStartDateTextAr {
-    final dateStr = sortie.value.prevStartDate;
-    if (dateStr == null || dateStr.isEmpty) {
-      return 'تاريخ الانطلاق المتوقع: غير محدد';
-    }
-    try {
-      final date = DateTime.parse(dateStr);
-      final formatted = '${date.day.toString().padLeft(2, '0')}/'
-          '${date.month.toString().padLeft(2, '0')}/'
-          '${date.year}';
-      return 'تاريخ الانطلاق المتوقع: $formatted';
-    } catch (_) {
-      return 'تاريخ الانطلاق المتوقع: $dateStr';
-    }
-  }
+  /// Real end date (dateEffectStart + delayExecuteDay)
+  String get realEndText => ChronoHelper.formatEndDate(
+        startDateStr: sortie.value.dateEffectStart,
+        delayExecuteDay: sortie.value.delayExecuteDay,
+      );
 
-  /// Arabic formatted string for effective start date (from Démarrage status)
-  String get dateEffectStartTextAr {
-    final dateStr = sortie.value.dateEffectStart;
-    if (dateStr == null || dateStr.isEmpty) {
-      return 'تاريخ الانطلاق الفعلي: غير محدد';
-    }
-    try {
-      final date = DateTime.parse(dateStr);
-      final formatted = '${date.day.toString().padLeft(2, '0')}/'
-          '${date.month.toString().padLeft(2, '0')}/'
-          '${date.year}';
-      return 'تاريخ الانطلاق الفعلي: $formatted';
-    } catch (_) {
-      return 'تاريخ الانطلاق الفعلي: $dateStr';
-    }
-  }
+  /// Planned start date (prevStartDate from Lot API)
+  String get plannedStartText =>
+      ChronoHelper.formatDateString(sortie.value.prevStartDate);
+
+  /// Planned end date (prevStartDate + delayExecuteDay)
+  String get plannedEndText => ChronoHelper.formatEndDate(
+        startDateStr: sortie.value.prevStartDate,
+        delayExecuteDay: sortie.value.delayExecuteDay,
+      );
 
   // Method to filter items based on search query
   void filterItems() {
